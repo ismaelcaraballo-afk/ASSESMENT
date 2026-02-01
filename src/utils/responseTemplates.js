@@ -380,11 +380,22 @@ export function getTemplateCategories() {
 
 // Fill in template placeholders
 export function fillTemplate(template, values = {}) {
-  let filled = template.body
+  // Handle both string templates and template objects
+  const templateBody = typeof template === 'string' ? template : template.body
+  let filled = templateBody
+  
   Object.entries(values).forEach(([key, value]) => {
-    const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g')
-    filled = filled.replace(regex, value)
+    // Support both {{key}} and {key} formats
+    const regexDouble = new RegExp(`\\{\\{${key}\\}\\}`, 'g')
+    const regexSingle = new RegExp(`\\{${key}\\}`, 'g')
+    filled = filled.replace(regexDouble, value)
+    filled = filled.replace(regexSingle, value)
   })
+  
+  if (typeof template === 'string') {
+    return filled
+  }
+  
   return {
     ...template,
     body: filled

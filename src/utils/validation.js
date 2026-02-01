@@ -116,3 +116,113 @@ export function redactPII(message) {
   
   return redacted
 }
+
+// Language detection patterns for common languages
+const LANGUAGE_PATTERNS = {
+  spanish: {
+    regex: /\b(hola|gracias|por\s*favor|ayuda|problema|cuenta|pago|necesito|tengo|quiero|cuando|porque|donde|como|urgente|importante)\b/gi,
+    threshold: 2
+  },
+  french: {
+    regex: /\b(bonjour|merci|s'il\s*vous\s*pla[iî]t|aide|probl[eè]me|compte|paiement|besoin|j'ai|je\s*veux|quand|pourquoi|o[uù]|comment|urgent)\b/gi,
+    threshold: 2
+  },
+  german: {
+    regex: /\b(hallo|danke|bitte|hilfe|problem|konto|zahlung|brauche|ich\s*habe|ich\s*will|wann|warum|wo|wie|dringend|wichtig)\b/gi,
+    threshold: 2
+  },
+  portuguese: {
+    regex: /\b(ol[aá]|obrigad[oa]|por\s*favor|ajuda|problema|conta|pagamento|preciso|tenho|quero|quando|porque|onde|como|urgente)\b/gi,
+    threshold: 2
+  },
+  italian: {
+    regex: /\b(ciao|grazie|per\s*favore|aiuto|problema|conto|pagamento|bisogno|ho|voglio|quando|perch[eé]|dove|come|urgente)\b/gi,
+    threshold: 2
+  },
+  chinese: {
+    regex: /[\u4e00-\u9fff]/g,
+    threshold: 3
+  },
+  japanese: {
+    regex: /[\u3040-\u309f\u30a0-\u30ff]/g,
+    threshold: 3
+  },
+  korean: {
+    regex: /[\uac00-\ud7af]/g,
+    threshold: 3
+  },
+  arabic: {
+    regex: /[\u0600-\u06ff]/g,
+    threshold: 3
+  },
+  russian: {
+    regex: /[\u0400-\u04ff]/g,
+    threshold: 3
+  }
+}
+
+export function detectLanguage(message) {
+  const text = message.toLowerCase()
+  const detectedLanguages = []
+  
+  // Check ASCII ratio (English typically has high ASCII ratio)
+  const asciiChars = (text.match(/[\x00-\x7F]/g) || []).length
+  const totalChars = text.length
+  const asciiRatio = totalChars > 0 ? asciiChars / totalChars : 1
+  
+  // Check each language pattern
+  for (const [language, config] of Object.entries(LANGUAGE_PATTERNS)) {
+    config.regex.lastIndex = 0 // Reset regex
+    const matches = text.match(config.regex) || []
+    
+    if (matches.length >= config.threshold) {
+      detectedLanguages.push({
+        language,
+        confidence: Math.min(matches.length / (config.threshold * 2), 1),
+        matchCount: matches.length
+      })
+    }
+  }
+  
+  // Sort by confidence
+  detectedLanguages.sort((a, b) => b.confidence - a.confidence)
+  
+  // Determine primary language
+  let primaryLanguage = 'english'
+  let isNonEnglish = false
+  
+  if (detectedLanguages.length > 0) {
+    primaryLanguage = detectedLanguages[0].language
+    isNonEnglish = true
+  } else if (asciiRatio < 0.7) {
+    // High non-ASCII but no specific language detected
+    primaryLanguage = 'unknown-non-english'
+    isNonEnglish = true
+  }
+  
+  return {
+    primaryLanguage,
+    isNonEnglish,
+    detectedLanguages,
+    asciiRatio,
+    needsTranslation: isNonEnglish
+  }
+}
+
+export function getLanguageDisplayName(code) {
+  const names = {
+    english: 'English',
+    spanish: 'Spanish',
+    french: 'French',
+    german: 'German',
+    portuguese: 'Portuguese',
+    italian: 'Italian',
+    chinese: 'Chinese',
+    japanese: 'Japanese',
+    korean: 'Korean',
+    arabic: 'Arabic',
+    russian: 'Russian',
+    'unknown-non-english': 'Non-English'
+  }
+  return names[code] || code
+}

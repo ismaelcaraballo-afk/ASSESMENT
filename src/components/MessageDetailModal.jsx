@@ -1,4 +1,24 @@
+import { useEffect, useRef } from 'react'
+import { useFocusTrap, useRestoreFocus } from '../hooks/useAccessibility'
+
 function MessageDetailModal({ isOpen, onClose, message }) {
+  const focusTrapRef = useFocusTrap(isOpen)
+  useRestoreFocus()
+
+  // Handle Escape key
+  useEffect(() => {
+    if (!isOpen) return
+    
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose()
+      }
+    }
+    
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, onClose])
+
   if (!isOpen || !message) return null
 
   const urgencyColors = {
@@ -14,11 +34,20 @@ function MessageDetailModal({ isOpen, onClose, message }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+    <div 
+      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div 
+        ref={focusTrapRef}
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+      >
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
           <div className="flex items-center gap-3">
+            <h2 id="modal-title" className="sr-only">Message Analysis Details</h2>
             <span className={`px-3 py-1 rounded-full text-sm font-semibold ${urgencyColors[message.urgency] || urgencyColors.Low}`}>
               {message.urgency}
             </span>
@@ -29,6 +58,7 @@ function MessageDetailModal({ isOpen, onClose, message }) {
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-2xl"
+            aria-label="Close modal"
           >
             ×
           </button>

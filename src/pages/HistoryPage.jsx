@@ -34,11 +34,24 @@ function HistoryPage() {
     const actualIndex = history.findIndex(h => h === filteredHistory[index])
     if (actualIndex === -1) return
     
+    const deletedItem = history[actualIndex]
     const newHistory = [...history]
     newHistory.splice(actualIndex, 1)
     localStorage.setItem('triageHistory', JSON.stringify(newHistory))
     setHistory(newHistory)
-    info('Item deleted')
+    
+    // Show toast with undo option
+    info('Item deleted', {
+      duration: 5000,
+      onUndo: () => {
+        // Restore the deleted item
+        const restoredHistory = [...newHistory]
+        restoredHistory.splice(actualIndex, 0, deletedItem)
+        localStorage.setItem('triageHistory', JSON.stringify(restoredHistory))
+        setHistory(restoredHistory)
+        success('Item restored')
+      }
+    })
   }
 
   const exportCsv = () => {
