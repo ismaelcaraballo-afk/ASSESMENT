@@ -6,11 +6,14 @@ import BulkAnalyzePage from './pages/BulkAnalyzePage'
 import HistoryPage from './pages/HistoryPage'
 import DashboardPage from './pages/DashboardPage'
 import SettingsPage from './pages/SettingsPage'
+import { useTheme } from './context/ThemeContext'
 
 function App() {
+  const { isDark } = useTheme()
+  
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <Navigation />
         <Routes>
           <Route path="/" element={<HomePage />} />
