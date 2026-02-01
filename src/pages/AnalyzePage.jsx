@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { categorizeMessage } from '../utils/llmHelper'
 import { calculateUrgency } from '../utils/urgencyScorer'
-import { getRecommendedAction, shouldEscalate } from '../utils/templates'
+import { getRecommendedAction, getRoutingDestination, shouldEscalate } from '../utils/templates'
+import { detectPII, validateMessage } from '../utils/validation'
 
 function AnalyzePage() {
   const [message, setMessage] = useState('')
   const [results, setResults] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [validationErrors, setValidationErrors] = useState([])
+  const [piiFindings, setPiiFindings] = useState([])
 
   useEffect(() => {
     // Check for example message from home page
@@ -19,9 +22,18 @@ function AnalyzePage() {
   }, [])
 
   const handleAnalyze = async () => {
-    if (!message.trim()) {
-      alert('Please enter a message to analyze')
+    const errors = validateMessage(message)
+    const pii = detectPII(message)
+    setValidationErrors(errors)
+    setPiiFindings(pii)
+
+    if (errors.length > 0) {
       return
+    }
+
+    if (pii.length > 0) {
+      const proceed = window.confirm('PII detected. Proceed with analysis?')
+      if (!proceed) return
     }
 
     setIsLoading(true)
@@ -29,21 +41,31 @@ function AnalyzePage() {
     
     try {
       // Run categorization (LLM call)
-      const { category, reasoning } = await categorizeMessage(message)
+      const { category, categories, reasoning, confidence, model, latencyMs, cached } = await categorizeMessage(message)
       
       // Calculate urgency (rule-based)
       const urgency = calculateUrgency(message)
       
       // Get recommended action (template-based)
-      const recommendedAction = getRecommendedAction(category, urgency)
+      const recommendedAction = getRecommendedAction(categories || category, urgency)
+      const routingDestination = getRoutingDestination(categories || category)
       const escalate = shouldEscalate(category, urgency, message)
+      const needsReview = (confidence ?? 0.5) < 0.6 || (categories?.length || 1) > 1 || pii.length > 0
       
       const analysisResult = {
         message,
         category,
+        categories: categories || [category],
         urgency,
         recommendedAction,
+        routingDestination,
         escalate,
+        needsReview,
+        confidence: confidence ?? 0.5,
+        model: model || 'mock',
+        latencyMs: latencyMs ?? null,
+        cached: cached ?? false,
+        piiFindings: pii,
         reasoning,
         timestamp: new Date().toISOString()
       }
@@ -83,7 +105,11 @@ function AnalyzePage() {
             </label>
             <textarea
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e) => {
+                setMessage(e.target.value)
+                setValidationErrors([])
+                setPiiFindings([])
+              }}
               placeholder="Paste customer message here..."
               className="w-full border border-gray-300 rounded-lg p-3 h-40 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               disabled={isLoading}
@@ -91,6 +117,25 @@ function AnalyzePage() {
             <div className="text-sm text-gray-500 mt-1">
               {message.length} characters
             </div>
+            {validationErrors.length > 0 && (
+              <div className="mt-3 bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
+                <ul className="list-disc list-inside">
+                  {validationErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {piiFindings.length > 0 && (
+              <div className="mt-3 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-3 text-sm">
+                <div className="font-semibold mb-1">PII detected</div>
+                <ul className="list-disc list-inside">
+                  {piiFindings.map((finding, index) => (
+                    <li key={index}>{finding}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Action Buttons */}
@@ -134,8 +179,12 @@ function AnalyzePage() {
             <div className="space-y-4">
               <div>
                 <div className="text-sm font-semibold text-gray-600 mb-1">Category</div>
-                <div className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold">
-                  {results.category}
+                <div className="flex flex-wrap gap-2">
+                  {(results.categories || [results.category]).map((cat) => (
+                    <span key={cat} className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg font-semibold">
+                      {cat}
+                    </span>
+                  ))}
                 </div>
               </div>
 
@@ -158,11 +207,42 @@ function AnalyzePage() {
               </div>
 
               <div>
+                <div className="text-sm font-semibold text-gray-600 mb-1">Routing Destination</div>
+                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                  <p className="text-gray-800">{results.routingDestination}</p>
+                </div>
+              </div>
+
+              <div>
                 <div className="text-sm font-semibold text-gray-600 mb-1">Escalation</div>
                 <div className={`inline-block px-4 py-2 rounded-lg font-semibold ${
                   results.escalate ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
                 }`}>
                   {results.escalate ? 'Escalate to specialist' : 'Standard handling'}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-sm font-semibold text-gray-600 mb-1">Needs Review</div>
+                <div className={`inline-block px-4 py-2 rounded-lg font-semibold ${
+                  results.needsReview ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                }`}>
+                  {results.needsReview ? 'Manual review recommended' : 'Auto-triage OK'}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-sm font-semibold text-gray-600 mb-1">Confidence</div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
+                    {Math.round((results.confidence || 0) * 100)}%
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-gray-600 mb-1">Model</div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-800">
+                    {results.model}
+                  </div>
                 </div>
               </div>
 
@@ -176,12 +256,20 @@ function AnalyzePage() {
                   </div>
                 </div>
               </div>
+
+              {(results.latencyMs || results.cached) && (
+                <div className="text-xs text-gray-500">
+                  {results.latencyMs ? `Latency: ${results.latencyMs}ms` : null}
+                  {results.latencyMs && results.cached ? ' • ' : ''}
+                  {results.cached ? 'Cache hit' : null}
+                </div>
+              )}
             </div>
 
             <div className="mt-6 pt-4 border-t border-gray-200">
               <button
                 onClick={() => {
-                  const text = `Category: ${results.category}\nUrgency: ${results.urgency}\nEscalation: ${results.escalate ? 'Yes' : 'No'}\nRecommendation: ${results.recommendedAction}\n\nReasoning: ${results.reasoning}`
+                  const text = `Category: ${(results.categories || [results.category]).join(', ')}\nUrgency: ${results.urgency}\nEscalation: ${results.escalate ? 'Yes' : 'No'}\nNeeds Review: ${results.needsReview ? 'Yes' : 'No'}\nConfidence: ${Math.round((results.confidence || 0) * 100)}%\nRouting: ${results.routingDestination}\nRecommendation: ${results.recommendedAction}\n\nReasoning: ${results.reasoning}`
                   navigator.clipboard.writeText(text)
                   alert('Results copied to clipboard!')
                 }}

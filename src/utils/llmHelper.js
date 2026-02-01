@@ -1,26 +1,7 @@
-import Groq from 'groq-sdk';
-
 /**
  * LLM Helper for categorizing customer support messages
- * Using Groq API for AI-powered categorization
+ * Calls backend API for secure Groq access
  */
-
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true // Required for browser-based calls (not recommended for production!)
-});
-
-const ALLOWED_CATEGORIES = [
-  'Billing Issue',
-  'Technical Problem',
-  'Outage',
-  'Account Access',
-  'Feature Request',
-  'General Inquiry',
-  'Feedback/Praise',
-  'Unknown'
-]
 
 /**
  * Categorize a customer support message using Groq AI
@@ -30,31 +11,29 @@ const ALLOWED_CATEGORIES = [
  */
 export async function categorizeMessage(message) {
   try {
-    const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: "You are a customer support triage assistant. Classify messages into predefined categories and provide concise reasoning."
-        },
-        {
-          role: "user",
-          content: `Return ONLY valid JSON with keys \"category\" and \"reasoning\".\n\nAllowed categories: ${ALLOWED_CATEGORIES.join(', ')}\n\nMessage: """${message}"""`
-        }
-      ],
-      temperature: 0.2,
-    });
+    const response = await fetch('/api/triage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message })
+    })
 
-    const content = response.choices[0].message.content?.trim() || ''
-    const parsed = parseJsonFromText(content)
+    if (!response.ok) {
+      throw new Error('Triage API failed')
+    }
 
-    if (parsed?.category && parsed?.reasoning) {
-      const normalizedCategory = ALLOWED_CATEGORIES.includes(parsed.category)
-        ? parsed.category
-        : 'Unknown'
+    const data = await response.json()
+
+    if (data?.primaryCategory && data?.reasoning) {
       return {
-        category: normalizedCategory,
-        reasoning: parsed.reasoning
+        category: data.primaryCategory,
+        categories: data.categories || [data.primaryCategory],
+        reasoning: data.reasoning,
+        confidence: data.confidence ?? 0.5,
+        model: data.model,
+        latencyMs: data.latencyMs,
+        cached: data.cached
       }
     }
 
@@ -124,7 +103,9 @@ function getMockCategorization(message) {
       lowerMessage.includes('database') || lowerMessage.includes('connection lost')) {
     return {
       category: "Outage",
-      reasoning: getRandomReasoning('outage')
+      categories: ["Outage"],
+      reasoning: getRandomReasoning('outage'),
+      confidence: 0.7
     }
   }
 
@@ -135,7 +116,9 @@ function getMockCategorization(message) {
       lowerMessage.includes('cannot access')) {
     return {
       category: "Account Access",
-      reasoning: getRandomReasoning('access')
+      categories: ["Account Access"],
+      reasoning: getRandomReasoning('access'),
+      confidence: 0.65
     }
   }
 
@@ -146,7 +129,9 @@ function getMockCategorization(message) {
       lowerMessage.includes('refund') || lowerMessage.includes('cancel') && lowerMessage.includes('account')) {
     return {
       category: "Billing Issue",
-      reasoning: getRandomReasoning('billing')
+      categories: ["Billing Issue"],
+      reasoning: getRandomReasoning('billing'),
+      confidence: 0.6
     };
   }
   
@@ -159,7 +144,9 @@ function getMockCategorization(message) {
       lowerMessage.includes('problem') && !lowerMessage.includes('no problem')) {
     return {
       category: "Technical Problem",
-      reasoning: getRandomReasoning('technical')
+      categories: ["Technical Problem"],
+      reasoning: getRandomReasoning('technical'),
+      confidence: 0.6
     };
   }
   
@@ -171,7 +158,9 @@ function getMockCategorization(message) {
       lowerMessage.includes('enhancement') || lowerMessage.includes('would be great')) {
     return {
       category: "Feature Request",
-      reasoning: getRandomReasoning('feature')
+      categories: ["Feature Request"],
+      reasoning: getRandomReasoning('feature'),
+      confidence: 0.55
     };
   }
   
@@ -180,7 +169,9 @@ function getMockCategorization(message) {
       !lowerMessage.includes('but') && !lowerMessage.includes('however')) {
     return {
       category: "Feedback/Praise",
-      reasoning: getRandomReasoning('positive')
+      categories: ["Feedback/Praise"],
+      reasoning: getRandomReasoning('positive'),
+      confidence: 0.6
     };
   }
   
@@ -191,27 +182,17 @@ function getMockCategorization(message) {
       lowerMessage.includes('?')) {
     return {
       category: "General Inquiry",
-      reasoning: getRandomReasoning('inquiry')
+      categories: ["General Inquiry"],
+      reasoning: getRandomReasoning('inquiry'),
+      confidence: 0.5
     };
   }
   
   // Fallback for ambiguous messages
   return {
     category: "General Inquiry",
-    reasoning: getRandomReasoning('ambiguous')
+    categories: ["General Inquiry"],
+    reasoning: getRandomReasoning('ambiguous'),
+    confidence: 0.4
   };
-}
-
-function parseJsonFromText(text) {
-  try {
-    return JSON.parse(text)
-  } catch (error) {
-    const match = text.match(/\{[\s\S]*\}/)
-    if (!match) return null
-    try {
-      return JSON.parse(match[0])
-    } catch (innerError) {
-      return null
-    }
-  }
 }
