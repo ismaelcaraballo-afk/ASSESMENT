@@ -45,6 +45,16 @@ function Navigation() {
               Analyze
             </Link>
             <Link
+              to="/bulk"
+              className={`px-4 py-2 rounded ${
+                isActive('/bulk') 
+                  ? 'bg-blue-700 font-semibold' 
+                  : 'hover:bg-blue-500'
+              }`}
+            >
+              Bulk
+            </Link>
+            <Link
               to="/history"
               className={`px-4 py-2 rounded ${
                 isActive('/history') 

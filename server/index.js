@@ -70,11 +70,30 @@ function buildPrompt(message) {
   return [
     {
       role: 'system',
-      content: 'You are a customer support triage assistant. Return concise reasoning and follow the JSON schema strictly.'
+      content: `You are a customer support triage assistant for a SaaS platform. Classify incoming messages accurately.
+
+Rules:
+1. Return ONLY valid JSON - no markdown, no explanation outside JSON
+2. Choose 1-3 categories that apply (most specific first)
+3. Confidence should reflect how certain you are (0.0-1.0)
+4. Keep reasoning to 1-2 sentences
+
+Allowed categories: ${ALLOWED_CATEGORIES.join(', ')}
+
+Examples:
+Message: "Database connection lost"
+Output: {"primaryCategory": "Outage", "categories": ["Outage"], "confidence": 0.95, "reasoning": "Database connectivity loss indicates a service outage requiring immediate attention."}
+
+Message: "Could you add dark mode?"
+Output: {"primaryCategory": "Feature Request", "categories": ["Feature Request"], "confidence": 0.9, "reasoning": "User is requesting a new UI feature."}
+
+Message: "My payment failed and I can't access my account"
+Output: {"primaryCategory": "Billing Issue", "categories": ["Billing Issue", "Account Access"], "confidence": 0.85, "reasoning": "Payment failure with access impact - may need billing and account support."}`
     },
     {
       role: 'user',
-      content: `Return ONLY valid JSON with keys: \"primaryCategory\" (string), \"categories\" (array of 1-3 strings), \"confidence\" (0-1), \"reasoning\" (string).\n\nAllowed categories: ${ALLOWED_CATEGORIES.join(', ')}\n\nMessage: """${message}"""`
+      content: `Message: """${message}"""
+Output:`
     }
   ]
 }
@@ -190,18 +209,64 @@ function mockCategorize(message) {
   }
 }
 
-async function withRetries(fn, retries) {
-  let attempt = 0
-  while (attempt <= retries) {
+async function withRetries(fn, retries, baseDelayMs = 300) {
+  let lastError
+  for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       return await fn()
     } catch (error) {
-      if (attempt === retries) throw error
-      await new Promise(resolve => setTimeout(resolve, 300 * (attempt + 1)))
-      attempt += 1
+      lastError = error
+      if (attempt < retries) {
+        const delay = baseDelayMs * Math.pow(2, attempt) // Exponential backoff
+        await new Promise(resolve => setTimeout(resolve, delay))
+      }
     }
   }
+  throw lastError
 }
+
+// Bulk triage endpoint
+app.post('/api/triage/bulk', async (req, res) => {
+  const { messages } = req.body || {}
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: 'Messages array is required.' })
+  }
+
+  if (messages.length > 50) {
+    return res.status(400).json({ error: 'Maximum 50 messages per batch.' })
+  }
+
+  const results = await Promise.all(
+    messages.map(async (message, index) => {
+      if (!message || typeof message !== 'string') {
+        return { index, error: 'Invalid message' }
+      }
+
+      const normalized = message.trim().toLowerCase()
+      const cached = cache.get(normalized)
+      const now = Date.now()
+
+      if (cached && cached.expiresAt > now) {
+        return { index, ...cached.data, cached: true }
+      }
+
+      const start = Date.now()
+      try {
+        const data = groq ? await withRetries(() => callGroq(message), 1) : mockCategorize(message)
+        const latencyMs = Date.now() - start
+        const response = { index, ...data, latencyMs, cached: false }
+        cache.set(normalized, { data: response, expiresAt: Date.now() + CACHE_TTL_MS })
+        return response
+      } catch (error) {
+        const fallback = mockCategorize(message)
+        return { index, ...fallback, latencyMs: Date.now() - start, cached: false }
+      }
+    })
+  )
+
+  return res.json({ results })
+})
 
 app.listen(PORT, () => {
   console.log(`Triage API listening on ${PORT}`)

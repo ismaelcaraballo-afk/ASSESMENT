@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { categorizeMessage } from '../utils/llmHelper'
-import { calculateUrgency } from '../utils/urgencyScorer'
+import { calculateUrgency, calculateUrgencyWithDetails } from '../utils/urgencyScorer'
 import { getRecommendedAction, getRoutingDestination, shouldEscalate } from '../utils/templates'
-import { detectPII, validateMessage } from '../utils/validation'
+import { detectPII, validateMessage, detectProfanity, extractSentiment } from '../utils/validation'
 
 function AnalyzePage() {
   const [message, setMessage] = useState('')
   const [results, setResults] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [validationErrors, setValidationErrors] = useState([])
+  const [validationWarnings, setValidationWarnings] = useState([])
   const [piiFindings, setPiiFindings] = useState([])
+  const [profanityFindings, setProfanityFindings] = useState([])
 
   useEffect(() => {
     // Check for example message from home page
@@ -22,10 +24,15 @@ function AnalyzePage() {
   }, [])
 
   const handleAnalyze = async () => {
-    const errors = validateMessage(message)
+    const { errors, warnings } = validateMessage(message)
     const pii = detectPII(message)
+    const profanity = detectProfanity(message)
+    const sentiment = extractSentiment(message)
+    
     setValidationErrors(errors)
+    setValidationWarnings(warnings || [])
     setPiiFindings(pii)
+    setProfanityFindings(profanity)
 
     if (errors.length > 0) {
       return
@@ -33,6 +40,11 @@ function AnalyzePage() {
 
     if (pii.length > 0) {
       const proceed = window.confirm('PII detected. Proceed with analysis?')
+      if (!proceed) return
+    }
+
+    if (profanity.length > 0) {
+      const proceed = window.confirm('Potentially inappropriate language detected. Proceed with analysis?')
       if (!proceed) return
     }
 
@@ -44,7 +56,9 @@ function AnalyzePage() {
       const { category, categories, reasoning, confidence, model, latencyMs, cached } = await categorizeMessage(message)
       
       // Calculate urgency (rule-based)
-      const urgency = calculateUrgency(message)
+      const urgencyDetails = calculateUrgencyWithDetails(message)
+      const urgency = urgencyDetails.level
+      const expectedResponseTime = urgencyDetails.expectedResponseTime
       
       // Get recommended action (template-based)
       const recommendedAction = getRecommendedAction(categories || category, urgency)
@@ -57,6 +71,8 @@ function AnalyzePage() {
         category,
         categories: categories || [category],
         urgency,
+        expectedResponseTime,
+        sentiment: sentiment.sentiment,
         recommendedAction,
         routingDestination,
         escalate,
@@ -66,6 +82,7 @@ function AnalyzePage() {
         latencyMs: latencyMs ?? null,
         cached: cached ?? false,
         piiFindings: pii,
+        profanityFindings: profanity,
         reasoning,
         timestamp: new Date().toISOString()
       }
@@ -108,7 +125,9 @@ function AnalyzePage() {
               onChange={(e) => {
                 setMessage(e.target.value)
                 setValidationErrors([])
+                setValidationWarnings([])
                 setPiiFindings([])
+                setProfanityFindings([])
               }}
               placeholder="Paste customer message here..."
               className="w-full border border-gray-300 rounded-lg p-3 h-40 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -190,14 +209,40 @@ function AnalyzePage() {
 
               <div>
                 <div className="text-sm font-semibold text-gray-600 mb-1">Urgency Level</div>
-                <div className={`inline-block px-4 py-2 rounded-lg font-semibold ${
-                  results.urgency === 'High' ? 'bg-red-200 text-red-900' :
-                  results.urgency === 'Medium' ? 'bg-yellow-200 text-yellow-900' :
-                  'bg-green-200 text-green-900'
-                }`}>
-                  {results.urgency}
+                <div className="flex items-center gap-3">
+                  <div className={`inline-block px-4 py-2 rounded-lg font-semibold ${
+                    results.urgency === 'High' ? 'bg-red-200 text-red-900' :
+                    results.urgency === 'Medium' ? 'bg-yellow-200 text-yellow-900' :
+                    'bg-green-200 text-green-900'
+                  }`}>
+                    {results.urgency}
+                  </div>
+                  {results.expectedResponseTime && (
+                    <div className="text-sm text-gray-600">
+                      ⏱️ Target response: <span className="font-semibold">{results.expectedResponseTime}</span>
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {results.sentiment && results.sentiment !== 'neutral' && (
+                <div>
+                  <div className="text-sm font-semibold text-gray-600 mb-1">Customer Sentiment</div>
+                  <div className={`inline-block px-4 py-2 rounded-lg font-semibold ${
+                    results.sentiment === 'positive' ? 'bg-green-100 text-green-800' :
+                    results.sentiment === 'frustrated' ? 'bg-red-100 text-red-800' :
+                    results.sentiment === 'urgent' ? 'bg-orange-100 text-orange-800' :
+                    results.sentiment === 'negative' ? 'bg-red-100 text-red-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}>
+                    {results.sentiment === 'positive' ? '😊 Positive' :
+                     results.sentiment === 'frustrated' ? '😤 Frustrated' :
+                     results.sentiment === 'urgent' ? '⚡ Urgent' :
+                     results.sentiment === 'negative' ? '😟 Negative' :
+                     results.sentiment}
+                  </div>
+                </div>
+              )}
 
               <div>
                 <div className="text-sm font-semibold text-gray-600 mb-1">Recommended Action</div>
