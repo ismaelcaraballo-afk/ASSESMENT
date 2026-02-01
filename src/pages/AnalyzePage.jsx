@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { categorizeMessage } from '../utils/llmHelper'
 import { calculateUrgency } from '../utils/urgencyScorer'
-import { getRecommendedAction } from '../utils/templates'
+import { getRecommendedAction, shouldEscalate } from '../utils/templates'
 
 function AnalyzePage() {
   const [message, setMessage] = useState('')
@@ -35,13 +35,15 @@ function AnalyzePage() {
       const urgency = calculateUrgency(message)
       
       // Get recommended action (template-based)
-      const recommendedAction = getRecommendedAction(category)
+      const recommendedAction = getRecommendedAction(category, urgency)
+      const escalate = shouldEscalate(category, urgency, message)
       
       const analysisResult = {
         message,
         category,
         urgency,
         recommendedAction,
+        escalate,
         reasoning,
         timestamp: new Date().toISOString()
       }
@@ -156,6 +158,15 @@ function AnalyzePage() {
               </div>
 
               <div>
+                <div className="text-sm font-semibold text-gray-600 mb-1">Escalation</div>
+                <div className={`inline-block px-4 py-2 rounded-lg font-semibold ${
+                  results.escalate ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                }`}>
+                  {results.escalate ? 'Escalate to specialist' : 'Standard handling'}
+                </div>
+              </div>
+
+              <div>
                 <div className="text-sm font-semibold text-gray-600 mb-1">AI Reasoning</div>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                   <div className="prose prose-sm max-w-none text-gray-700">
@@ -170,7 +181,7 @@ function AnalyzePage() {
             <div className="mt-6 pt-4 border-t border-gray-200">
               <button
                 onClick={() => {
-                  const text = `Category: ${results.category}\nUrgency: ${results.urgency}\nRecommendation: ${results.recommendedAction}\n\nReasoning: ${results.reasoning}`
+                  const text = `Category: ${results.category}\nUrgency: ${results.urgency}\nEscalation: ${results.escalate ? 'Yes' : 'No'}\nRecommendation: ${results.recommendedAction}\n\nReasoning: ${results.reasoning}`
                   navigator.clipboard.writeText(text)
                   alert('Results copied to clipboard!')
                 }}

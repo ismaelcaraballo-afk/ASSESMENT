@@ -11,6 +11,17 @@ const groq = new Groq({
   dangerouslyAllowBrowser: true // Required for browser-based calls (not recommended for production!)
 });
 
+const ALLOWED_CATEGORIES = [
+  'Billing Issue',
+  'Technical Problem',
+  'Outage',
+  'Account Access',
+  'Feature Request',
+  'General Inquiry',
+  'Feedback/Praise',
+  'Unknown'
+]
+
 /**
  * Categorize a customer support message using Groq AI
  * 
@@ -23,33 +34,31 @@ export async function categorizeMessage(message) {
       model: "llama-3.3-70b-versatile",
       messages: [
         {
+          role: "system",
+          content: "You are a customer support triage assistant. Classify messages into predefined categories and provide concise reasoning."
+        },
+        {
           role: "user",
-          content: `Categorize this customer support message: ${message}`
+          content: `Return ONLY valid JSON with keys \"category\" and \"reasoning\".\n\nAllowed categories: ${ALLOWED_CATEGORIES.join(', ')}\n\nMessage: """${message}"""`
         }
       ],
-      temperature: 0.7,
+      temperature: 0.2,
     });
 
-    const content = response.choices[0].message.content;
-    
-    const lines = content.split('\n');
-    let category = "Unknown";
-    let reasoning = content;
-    
-    if (content.toLowerCase().includes('billing')) {
-      category = "Billing Issue";
-    } else if (content.toLowerCase().includes('technical') || content.toLowerCase().includes('bug')) {
-      category = "Technical Problem";
-    } else if (content.toLowerCase().includes('feature')) {
-      category = "Feature Request";
-    } else if (content.toLowerCase().includes('inquiry') || content.toLowerCase().includes('question')) {
-      category = "General Inquiry";
+    const content = response.choices[0].message.content?.trim() || ''
+    const parsed = parseJsonFromText(content)
+
+    if (parsed?.category && parsed?.reasoning) {
+      const normalizedCategory = ALLOWED_CATEGORIES.includes(parsed.category)
+        ? parsed.category
+        : 'Unknown'
+      return {
+        category: normalizedCategory,
+        reasoning: parsed.reasoning
+      }
     }
-    
-    return {
-      category,
-      reasoning: content
-    };
+
+    return getMockCategorization(message)
   } catch (error) {
     console.warn('Groq API failed, using mock response:', error.message);
     return getMockCategorization(message);
@@ -85,6 +94,14 @@ function getMockCategorization(message) {
       "The message contains questions that don't indicate a specific problem. This is likely a general inquiry requiring informational support.",
       "Based on the question format, this seems to be an information request rather than a technical or billing issue.",
     ],
+    access: [
+      "The customer is unable to access their account or sign in. This requires account access troubleshooting.",
+      "This message indicates a login or access issue. The customer likely needs help resetting credentials or SSO access.",
+    ],
+    outage: [
+      "The message describes a service outage or downtime. This requires incident response and escalation.",
+      "This looks like an outage affecting service availability and should be treated as urgent.",
+    ],
     positive: [
       "This message contains positive sentiment and appreciation. While not a support request, it may warrant acknowledgment.",
       "The customer is expressing satisfaction or gratitude. This doesn't appear to require immediate support action.",
@@ -101,6 +118,27 @@ function getMockCategorization(message) {
     return reasons[Math.floor(Math.random() * reasons.length)];
   };
   
+  // Outage detection
+    if (lowerMessage.includes('outage') || lowerMessage.includes('server down') ||
+      lowerMessage.includes('down') || lowerMessage.includes('production') ||
+      lowerMessage.includes('database') || lowerMessage.includes('connection lost')) {
+    return {
+      category: "Outage",
+      reasoning: getRandomReasoning('outage')
+    }
+  }
+
+  // Account access detection
+  if (lowerMessage.includes('login') || lowerMessage.includes('log in') ||
+      lowerMessage.includes('password') || lowerMessage.includes('reset') ||
+      lowerMessage.includes('locked out') || lowerMessage.includes("can't access") ||
+      lowerMessage.includes('cannot access')) {
+    return {
+      category: "Account Access",
+      reasoning: getRandomReasoning('access')
+    }
+  }
+
   // Billing-related detection
   if (lowerMessage.includes('bill') || lowerMessage.includes('payment') || 
       lowerMessage.includes('charge') || lowerMessage.includes('invoice') ||
@@ -141,7 +179,7 @@ function getMockCategorization(message) {
   if ((lowerMessage.includes('thank') || lowerMessage.includes('thanks') || lowerMessage.includes('appreciate')) &&
       !lowerMessage.includes('but') && !lowerMessage.includes('however')) {
     return {
-      category: "General Inquiry",
+      category: "Feedback/Praise",
       reasoning: getRandomReasoning('positive')
     };
   }
@@ -162,4 +200,18 @@ function getMockCategorization(message) {
     category: "General Inquiry",
     reasoning: getRandomReasoning('ambiguous')
   };
+}
+
+function parseJsonFromText(text) {
+  try {
+    return JSON.parse(text)
+  } catch (error) {
+    const match = text.match(/\{[\s\S]*\}/)
+    if (!match) return null
+    try {
+      return JSON.parse(match[0])
+    } catch (innerError) {
+      return null
+    }
+  }
 }

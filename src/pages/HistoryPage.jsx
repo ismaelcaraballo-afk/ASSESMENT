@@ -127,6 +127,11 @@ function HistoryPage() {
                       }`}>
                         {item.urgency} Urgency
                       </span>
+                      <span className={`text-xs px-3 py-1 rounded-full font-semibold ${
+                        item.escalate ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700'
+                      }`}>
+                        {item.escalate ? 'Escalate' : 'Standard'}
+                      </span>
                     </div>
                   </div>
                   <div className="text-gray-400 ml-4">
@@ -148,6 +153,14 @@ function HistoryPage() {
                       <div className="text-xs font-semibold text-gray-600 mb-1">Recommended Action</div>
                       <div className="text-sm text-gray-800 bg-purple-50 p-3 rounded border border-purple-200">
                         {item.recommendedAction}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-gray-600 mb-1">Escalation</div>
+                      <div className={`text-sm p-3 rounded border ${
+                        item.escalate ? 'bg-red-50 border-red-200 text-red-800' : 'bg-green-50 border-green-200 text-green-800'
+                      }`}>
+                        {item.escalate ? 'Escalate to specialist' : 'Standard handling'}
                       </div>
                     </div>
                     <div>
