@@ -101,7 +101,86 @@ This iteration focuses on accuracy, safety, and operational readiness for the Re
 - “My payment failed and I can’t access the dashboard” → Multi-label
 - “hi” → Validation error
 
-## Files Touched
-- Client: Analyze, History, Settings, Templates, Validation
-- Backend: server/index.js
-- Config: Vite proxy, package scripts, .env example
+---
+
+## Security Hardening (Feb 2026)
+
+### 9) Security Middleware Stack
+**Problem:** Server lacked production-grade security headers and rate limiting.
+
+**Solution:** Added to Express server:
+- `helmet.js` for security headers (XSS protection, content-type sniffing prevention, etc.)
+- `express-rate-limit` (100 requests/minute per IP on `/api/` routes)
+- Request body size limit (100kb max JSON payload)
+- CORS restricted to whitelisted origins (environment-aware)
+
+**Impact:**
+- Protection against common web vulnerabilities
+- DoS mitigation via rate limiting
+- Prevents large payload attacks
+
+### 10) Dependency Vulnerability Fix
+**Problem:** `qs` package had a DoS vulnerability (arrayLimit bypass).
+
+**Solution:** Ran `npm audit fix` to update affected dependency.
+
+**Impact:**
+- 0 known vulnerabilities in dependency tree
+
+### 11) Code Quality & Linting Improvements
+**Problem:** Multiple lint errors and warnings; inconsistent ESLint configuration.
+
+**Solution:**
+- Fixed all unused variable/import errors across codebase
+- Updated ESLint config with proper globals for Node.js, Vitest, and React
+- Added `caughtErrorsIgnorePattern` for error handlers
+- Separated config for server, test, and frontend files
+- Disabled `react-refresh/only-export-components` for context files
+
+**Impact:**
+- 0 lint errors (only non-blocking warnings remain)
+- Cleaner, more maintainable code
+
+### 12) React Best Practices Refactoring
+**Problem:** Multiple pages used `useEffect` to set initial state from localStorage, triggering unnecessary re-renders.
+
+**Solution:** Refactored to use lazy state initialization:
+- `HomePage`: Uses `useState(getInitialStats)` 
+- `SettingsPage`: Uses `useState(() => getSettings().templates)`
+- `DashboardPage`: Computes initial data outside component, no loading state needed
+- `HistoryPage`: Uses lazy initialization for history state
+
+**Impact:**
+- Faster initial render (no double-render from useEffect)
+- Cleaner React patterns
+- Eliminates React Hooks lint warnings about setState in effects
+
+### 13) Validation Warnings Display
+**Problem:** Validation warnings were detected but never shown to users.
+
+**Solution:** Added UI display for validation warnings in AnalyzePage (spam detection, special character ratio).
+
+**Impact:**
+- Users now see all validation feedback, not just errors
+
+## Files Touched (Security Update)
+- `server/index.js` - Security middleware, fixed duplicate dotenv, error handling
+- `eslint.config.js` - Complete restructure for multi-environment support
+- `package.json` - Added helmet, express-rate-limit dependencies
+- `.env.example` - Added NODE_ENV, PORT, ALLOWED_ORIGINS config
+- `src/pages/*.jsx` - Refactored state initialization patterns
+- `src/components/*.jsx` - Fixed unused imports
+- `src/context/*.test.jsx` - Fixed test globals
+- `src/utils/settings.js` - Fixed unused error variable
+
+## Production Readiness Checklist
+- [x] Security headers (helmet)
+- [x] Rate limiting
+- [x] CORS restriction
+- [x] Body size limits
+- [x] 0 npm vulnerabilities
+- [x] 0 lint errors
+- [x] 103/103 tests passing
+- [ ] HTTPS (requires reverse proxy or cloud provider)
+- [ ] Authentication (if needed for your use case)
+- [ ] Server-side storage (currently uses localStorage)
