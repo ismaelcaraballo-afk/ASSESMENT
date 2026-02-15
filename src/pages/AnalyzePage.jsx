@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { categorizeMessage } from '../utils/llmHelper'
-import { calculateUrgency, calculateUrgencyWithDetails } from '../utils/urgencyScorer'
+import { calculateUrgencyWithDetails } from '../utils/urgencyScorer'
 import { getRecommendedAction, getRoutingDestination, shouldEscalate } from '../utils/templates'
 import { detectPII, validateMessage, detectProfanity, extractSentiment } from '../utils/validation'
 import { useToast } from '../context/ToastContext'
@@ -184,6 +184,16 @@ function AnalyzePage() {
                 <ul className="list-disc list-inside">
                   {validationErrors.map((error, index) => (
                     <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {validationWarnings.length > 0 && (
+              <div className="mt-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 rounded-lg p-3 text-sm">
+                <div className="font-semibold mb-1">⚠️ Warnings</div>
+                <ul className="list-disc list-inside">
+                  {validationWarnings.map((warning, index) => (
+                    <li key={index}>{warning}</li>
                   ))}
                 </ul>
               </div>

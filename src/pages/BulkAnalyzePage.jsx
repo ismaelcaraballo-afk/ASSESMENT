@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { calculateUrgencyWithDetails } from '../utils/urgencyScorer'
 import { getRecommendedAction, getRoutingDestination, shouldEscalate } from '../utils/templates'
-import { detectPII, validateMessage, extractSentiment } from '../utils/validation'
+import { detectPII, extractSentiment } from '../utils/validation'
 import { useToast } from '../context/ToastContext'
 import { SkeletonTable } from '../components/Skeleton'
 
@@ -82,7 +82,7 @@ function BulkAnalyzePage() {
       })
       localStorage.setItem('triageHistory', JSON.stringify(history))
 
-    } catch (err) {
+    } catch (_err) {
       showError('Failed to process messages. Please try again.')
     } finally {
       setIsLoading(false)

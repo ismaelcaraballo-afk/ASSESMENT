@@ -1,108 +1,98 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useToast } from '../context/ToastContext'
-import { SkeletonDashboard } from '../components/Skeleton'
+
+// Pure function to compute dashboard data from history
+function computeDashboardData(history) {
+  const today = new Date().toDateString()
+  const todayMessages = history.filter(item => 
+    new Date(item.timestamp).toDateString() === today
+  )
+
+  const highUrgency = history.filter(h => h.urgency === 'High').length
+  const needsReview = history.filter(h => h.needsReview).length
+  const escalated = history.filter(h => h.escalate).length
+  const piiDetected = history.filter(h => h.piiFindings?.length > 0).length
+  const confidenceSum = history.reduce((sum, h) => sum + (h.confidence || 0), 0)
+  
+  const uniqueDays = new Set(history.map(h => new Date(h.timestamp).toDateString())).size
+  const totalDays = uniqueDays > 0 ? uniqueDays : 1
+  
+  const stats = {
+    total: history.length,
+    today: todayMessages.length,
+    highUrgencyPercent: history.length > 0 ? Math.round((highUrgency / history.length) * 100) : 0,
+    avgPerDay: Math.round(history.length / totalDays),
+    needsReviewPercent: history.length > 0 ? Math.round((needsReview / history.length) * 100) : 0,
+    escalationRate: history.length > 0 ? Math.round((escalated / history.length) * 100) : 0,
+    avgConfidence: history.length > 0 ? Math.round((confidenceSum / history.length) * 100) : 0,
+    piiDetectedCount: piiDetected
+  }
+
+  const categories = {}
+  history.forEach(item => {
+    categories[item.category] = (categories[item.category] || 0) + 1
+  })
+  const categoryData = Object.entries(categories).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count)
+
+  const urgency = { High: 0, Medium: 0, Low: 0 }
+  history.forEach(item => {
+    urgency[item.urgency] = (urgency[item.urgency] || 0) + 1
+  })
+
+  const sentiments = {}
+  history.forEach(item => {
+    if (item.sentiment) {
+      sentiments[item.sentiment] = (sentiments[item.sentiment] || 0) + 1
+    }
+  })
+
+  const recentHighUrgency = history
+    .filter(h => h.urgency === 'High')
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .slice(0, 5)
+
+  const trend = []
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date()
+    date.setDate(date.getDate() - i)
+    const dateStr = date.toDateString()
+    const dayMessages = history.filter(h => new Date(h.timestamp).toDateString() === dateStr)
+    trend.push({
+      date: date.toLocaleDateString('en-US', { weekday: 'short' }),
+      count: dayMessages.length,
+      high: dayMessages.filter(m => m.urgency === 'High').length
+    })
+  }
+
+  return { stats, categoryData, urgencyData: urgency, sentimentData: sentiments, recentHighUrgency, weeklyTrend: trend }
+}
+
+function getInitialDashboardData() {
+  const history = JSON.parse(localStorage.getItem('triageHistory') || '[]')
+  return computeDashboardData(history)
+}
 
 function DashboardPage() {
-  const [stats, setStats] = useState({
-    total: 0,
-    today: 0,
-    highUrgencyPercent: 0,
-    avgPerDay: 0,
-    needsReviewPercent: 0,
-    escalationRate: 0,
-    avgConfidence: 0,
-    piiDetectedCount: 0
-  })
-  const [categoryData, setCategoryData] = useState([])
-  const [urgencyData, setUrgencyData] = useState({ High: 0, Medium: 0, Low: 0 })
-  const [sentimentData, setSentimentData] = useState({})
-  const [recentHighUrgency, setRecentHighUrgency] = useState([])
-  const [weeklyTrend, setWeeklyTrend] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const initialData = getInitialDashboardData()
+  const [stats, setStats] = useState(initialData.stats)
+  const [categoryData, setCategoryData] = useState(initialData.categoryData)
+  const [urgencyData, setUrgencyData] = useState(initialData.urgencyData)
+  const [sentimentData, setSentimentData] = useState(initialData.sentimentData)
+  const [recentHighUrgency, setRecentHighUrgency] = useState(initialData.recentHighUrgency)
+  const [weeklyTrend, setWeeklyTrend] = useState(initialData.weeklyTrend)
   const [autoRefresh, setAutoRefresh] = useState(false)
   const { info } = useToast()
 
   const loadDashboardData = useCallback(() => {
     const history = JSON.parse(localStorage.getItem('triageHistory') || '[]')
-    const today = new Date().toDateString()
-    const todayMessages = history.filter(item => 
-      new Date(item.timestamp).toDateString() === today
-    )
-
-    // Calculate stats
-    const highUrgency = history.filter(h => h.urgency === 'High').length
-    const needsReview = history.filter(h => h.needsReview).length
-    const escalated = history.filter(h => h.escalate).length
-    const piiDetected = history.filter(h => h.piiFindings?.length > 0).length
-    const confidenceSum = history.reduce((sum, h) => sum + (h.confidence || 0), 0)
-    
-    // Calculate unique days
-    const uniqueDays = new Set(history.map(h => new Date(h.timestamp).toDateString())).size
-    const totalDays = uniqueDays > 0 ? uniqueDays : 1
-    
-    setStats({
-      total: history.length,
-      today: todayMessages.length,
-      highUrgencyPercent: history.length > 0 ? Math.round((highUrgency / history.length) * 100) : 0,
-      avgPerDay: Math.round(history.length / totalDays),
-      needsReviewPercent: history.length > 0 ? Math.round((needsReview / history.length) * 100) : 0,
-      escalationRate: history.length > 0 ? Math.round((escalated / history.length) * 100) : 0,
-      avgConfidence: history.length > 0 ? Math.round((confidenceSum / history.length) * 100) : 0,
-      piiDetectedCount: piiDetected
-    })
-
-    // Category distribution
-    const categories = {}
-    history.forEach(item => {
-      categories[item.category] = (categories[item.category] || 0) + 1
-    })
-    setCategoryData(Object.entries(categories).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count))
-
-    // Urgency breakdown
-    const urgency = { High: 0, Medium: 0, Low: 0 }
-    history.forEach(item => {
-      urgency[item.urgency] = (urgency[item.urgency] || 0) + 1
-    })
-    setUrgencyData(urgency)
-
-    // Sentiment breakdown
-    const sentiments = {}
-    history.forEach(item => {
-      if (item.sentiment) {
-        sentiments[item.sentiment] = (sentiments[item.sentiment] || 0) + 1
-      }
-    })
-    setSentimentData(sentiments)
-
-    // Recent high urgency messages
-    setRecentHighUrgency(
-      history
-        .filter(h => h.urgency === 'High')
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-        .slice(0, 5)
-    )
-
-    // Weekly trend (last 7 days)
-    const trend = []
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date()
-      date.setDate(date.getDate() - i)
-      const dateStr = date.toDateString()
-      const dayMessages = history.filter(h => new Date(h.timestamp).toDateString() === dateStr)
-      trend.push({
-        date: date.toLocaleDateString('en-US', { weekday: 'short' }),
-        count: dayMessages.length,
-        high: dayMessages.filter(m => m.urgency === 'High').length
-      })
-    }
-    setWeeklyTrend(trend)
-    
-    setIsLoading(false)
+    const data = computeDashboardData(history)
+    setStats(data.stats)
+    setCategoryData(data.categoryData)
+    setUrgencyData(data.urgencyData)
+    setSentimentData(data.sentimentData)
+    setRecentHighUrgency(data.recentHighUrgency)
+    setWeeklyTrend(data.weeklyTrend)
   }, [])
-
-  useEffect(() => {
-    loadDashboardData()
-  }, [loadDashboardData])
 
   // Auto-refresh
   useEffect(() => {
@@ -112,20 +102,6 @@ function DashboardPage() {
     }, 30000) // 30 seconds
     return () => clearInterval(interval)
   }, [autoRefresh, loadDashboardData])
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-            <p className="text-gray-600 dark:text-gray-400">Loading analytics...</p>
-          </div>
-          <SkeletonDashboard />
-        </div>
-      </div>
-    )
-  }
 
   const maxTrendCount = Math.max(...weeklyTrend.map(d => d.count), 1)
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useFocusTrap, useRestoreFocus } from '../hooks/useAccessibility'
 
 function MessageDetailModal({ isOpen, onClose, message }) {

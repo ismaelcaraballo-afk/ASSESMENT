@@ -6,8 +6,52 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   globalIgnores(['dist']),
+  // Server-side code (Node.js)
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['server/**/*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.node,
+      sourceType: 'module',
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+    },
+  },
+  // Test files (Vitest)
+  {
+    files: ['**/*.test.{js,jsx}', '**/test/**/*.{js,jsx}'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        vi: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        test: 'readonly',
+      },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^_|^[A-Z_]', argsIgnorePattern: '^_' }],
+    },
+  },
+  // Frontend code (React)
+  {
+    files: ['src/**/*.{js,jsx}'],
+    ignores: ['**/*.test.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -23,7 +67,18 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      'no-unused-vars': ['error', { varsIgnorePattern: '^_|^[A-Z_]', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+      'no-useless-escape': 'warn',
+      'no-control-regex': 'warn',
+      'react-hooks/preserve-manual-memoization': 'warn', // React Compiler optimization hint
+      'react-hooks/set-state-in-effect': 'warn', // Allow controlled setState in effects
+    },
+  },
+  // Context files (allow hook exports)
+  {
+    files: ['src/context/**/*.{js,jsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
     },
   },
 ])

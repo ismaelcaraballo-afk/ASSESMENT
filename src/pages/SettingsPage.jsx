@@ -1,19 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { CATEGORIES, DEFAULT_ROUTING, DEFAULT_TEMPLATES, getSettings, resetSettings, saveSettings } from '../utils/settings'
 import { useToast } from '../context/ToastContext'
 import { useTheme } from '../context/ThemeContext'
 
 function SettingsPage() {
-  const [templates, setTemplates] = useState(DEFAULT_TEMPLATES)
-  const [routing, setRouting] = useState(DEFAULT_ROUTING)
+  const [templates, setTemplates] = useState(() => getSettings().templates)
+  const [routing, setRouting] = useState(() => getSettings().routing)
   const { isDark, toggleTheme } = useTheme()
   const { success, info } = useToast()
-
-  useEffect(() => {
-    const settings = getSettings()
-    setTemplates(settings.templates)
-    setRouting(settings.routing)
-  }, [])
 
   const handleTemplateChange = (category, field, value) => {
     setTemplates(prev => ({

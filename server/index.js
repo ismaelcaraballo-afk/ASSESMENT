@@ -1,11 +1,11 @@
 import express from 'express'
 import cors from 'cors'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import Groq from 'groq-sdk'
 
 dotenv.config({ path: '.env.local' })
-
-dotenv.config()
 
 const PORT = process.env.PORT || 3001
 const apiKey = process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY
@@ -27,8 +27,23 @@ const cache = new Map()
 const CACHE_TTL_MS = 10 * 60 * 1000
 
 const app = express()
-app.use(cors())
-app.use(express.json())
+
+// Security middleware
+app.use(helmet())
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.ALLOWED_ORIGINS?.split(',') || ['https://yourdomain.com']
+    : ['http://localhost:5173', 'http://localhost:3000']
+}))
+app.use(express.json({ limit: '100kb' }))
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 100, // 100 requests per minute per IP
+  message: { error: 'Too many requests, please try again later.' }
+})
+app.use('/api/', limiter)
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' })
@@ -59,7 +74,7 @@ app.post('/api/triage', async (req, res) => {
     cache.set(normalized, { data: response, expiresAt: Date.now() + CACHE_TTL_MS })
 
     return res.json(response)
-  } catch (error) {
+  } catch (_error) {
     const fallback = mockCategorize(message)
     const latencyMs = Date.now() - start
     return res.json({ ...fallback, latencyMs, cached: false })
@@ -132,12 +147,12 @@ async function callGroq(message) {
 function parseJsonFromText(text) {
   try {
     return JSON.parse(text)
-  } catch (error) {
+  } catch (_error) {
     const match = text.match(/\{[\s\S]*\}/)
     if (!match) return null
     try {
       return JSON.parse(match[0])
-    } catch (innerError) {
+    } catch (_innerError) {
       return null
     }
   }
@@ -258,7 +273,7 @@ app.post('/api/triage/bulk', async (req, res) => {
         const response = { index, ...data, latencyMs, cached: false }
         cache.set(normalized, { data: response, expiresAt: Date.now() + CACHE_TTL_MS })
         return response
-      } catch (error) {
+      } catch (_error) {
         const fallback = mockCategorize(message)
         return { index, ...fallback, latencyMs: Date.now() - start, cached: false }
       }

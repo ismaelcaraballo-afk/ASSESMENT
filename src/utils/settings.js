@@ -67,7 +67,7 @@ export function getSettings() {
       templates: { ...DEFAULT_TEMPLATES, ...parsed.templates },
       routing: { ...DEFAULT_ROUTING, ...parsed.routing }
     }
-  } catch (error) {
+  } catch (_error) {
     return {
       templates: DEFAULT_TEMPLATES,
       routing: DEFAULT_ROUTING

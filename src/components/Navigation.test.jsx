@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '../context/ThemeContext'
 import { ToastProvider } from '../context/ToastContext'
@@ -58,7 +58,6 @@ describe('Navigation', () => {
       </TestWrapper>
     )
     // Mobile menu button should be in the DOM (hidden on desktop via CSS)
-    const menuButton = screen.queryByRole('button', { name: /menu/i })
     // It may or may not be present depending on implementation
     // Just verify the component renders without error
     expect(screen.getByText(/relay/i)).toBeInTheDocument()

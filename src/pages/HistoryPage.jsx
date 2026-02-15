@@ -1,10 +1,12 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { useToast } from '../context/ToastContext'
 import MessageDetailModal from '../components/MessageDetailModal'
 
 function HistoryPage() {
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState(() => 
+    JSON.parse(localStorage.getItem('triageHistory') || '[]')
+  )
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [urgencyFilter, setUrgencyFilter] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -12,15 +14,6 @@ function HistoryPage() {
   const [selectedMessage, setSelectedMessage] = useState(null)
   const [expandedIndex, setExpandedIndex] = useState(null)
   const { success, info } = useToast()
-
-  useEffect(() => {
-    loadHistory()
-  }, [])
-
-  const loadHistory = () => {
-    const savedHistory = JSON.parse(localStorage.getItem('triageHistory') || '[]')
-    setHistory(savedHistory)
-  }
 
   const clearHistory = () => {
     if (window.confirm('Are you sure you want to clear all history?')) {
