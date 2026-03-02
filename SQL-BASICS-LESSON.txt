@@ -1,0 +1,382 @@
+========================================
+  SQL Basics — Start Here
+  For Juan (and Ismael's refresher)
+========================================
+
+
+WHAT IS SQL?
+----------------------------------------
+
+SQL stands for "Structured Query Language."
+
+It's how you talk to a database. A database is just an organized collection
+of information — like a really powerful spreadsheet that can hold millions
+of rows and answer questions about the data instantly.
+
+You write SQL to ask the database questions ("show me all the students")
+or to add, change, and delete data.
+
+Think of it like this:
+  - A spreadsheet is a notebook.
+  - A database is a library.
+  - SQL is how you ask the librarian for what you need.
+
+
+========================================
+1. TABLES (Where Data Lives)
+========================================
+
+A database stores data in TABLES. A table looks like a spreadsheet:
+
+  +----+----------+-----+----------+
+  | id | name     | age | city     |
+  +----+----------+-----+----------+
+  |  1 | Juan     |  12 | New York |
+  |  2 | Ismael   |  30 | Bronx    |
+  |  3 | Kevin    |  11 | Brooklyn |
+  |  4 | Maria    |  12 | Queens   |
+  +----+----------+-----+----------+
+
+  - Each ROW is one person (one record).
+  - Each COLUMN is a piece of information about that person (a field).
+  - The "id" column is special — it gives every row a unique number.
+
+Every table has a name. This one could be called "students."
+
+
+========================================
+2. SELECT (Asking Questions)
+========================================
+
+SELECT is the most important SQL word. It means "show me."
+
+  SELECT * FROM students;
+
+Translation: "Show me EVERYTHING from the students table."
+
+The * means "all columns." The semicolon (;) at the end is like
+a period at the end of a sentence.
+
+You can pick specific columns:
+
+  SELECT name, age FROM students;
+
+Result:
+  +----------+-----+
+  | name     | age |
+  +----------+-----+
+  | Juan     |  12 |
+  | Ismael   |  30 |
+  | Kevin    |  11 |
+  | Maria    |  12 |
+  +----------+-----+
+
+Only shows name and age — nothing else.
+
+
+========================================
+3. WHERE (Filtering Results)
+========================================
+
+WHERE lets you filter — like searching with a condition.
+
+  SELECT * FROM students WHERE age = 12;
+
+Translation: "Show me all students who are 12 years old."
+
+Result:
+  +----+-------+-----+----------+
+  | id | name  | age | city     |
+  +----+-------+-----+----------+
+  |  1 | Juan  |  12 | New York |
+  |  4 | Maria |  12 | Queens   |
+  +----+-------+-----+----------+
+
+More examples:
+
+  SELECT * FROM students WHERE city = 'Bronx';
+  -- Show students from the Bronx
+
+  SELECT name FROM students WHERE age > 11;
+  -- Show names of students older than 11
+
+  SELECT * FROM students WHERE name = 'Kevin';
+  -- Show Kevin's row
+
+IMPORTANT: In SQL, text values go in SINGLE quotes ('Bronx'),
+not double quotes. Numbers don't need quotes at all.
+
+The comparison symbols (same as math class):
+  =     equals
+  !=    not equal
+  >     greater than
+  <     less than
+  >=    greater than or equal to
+  <=    less than or equal to
+
+
+========================================
+4. INSERT (Adding New Data)
+========================================
+
+INSERT adds a new row to a table.
+
+  INSERT INTO students (name, age, city)
+  VALUES ('Sofia', 13, 'Manhattan');
+
+Translation: "Add a new student named Sofia, age 13, from Manhattan."
+
+Now the table looks like:
+  +----+----------+-----+-----------+
+  | id | name     | age | city      |
+  +----+----------+-----+-----------+
+  |  1 | Juan     |  12 | New York  |
+  |  2 | Ismael   |  30 | Bronx     |
+  |  3 | Kevin    |  11 | Brooklyn  |
+  |  4 | Maria    |  12 | Queens    |
+  |  5 | Sofia    |  13 | Manhattan |
+  +----+----------+-----+-----------+
+
+Notice: you don't type the id. The database gives it the next number
+automatically. That's what makes it special.
+
+
+========================================
+5. UPDATE (Changing Data)
+========================================
+
+UPDATE changes data that already exists.
+
+  UPDATE students SET age = 13 WHERE name = 'Juan';
+
+Translation: "Change Juan's age to 13."
+
+You ALWAYS use WHERE with UPDATE. If you forget the WHERE, it changes
+EVERY row in the table. That's bad.
+
+  -- This is DANGEROUS:
+  UPDATE students SET age = 99;
+  -- Now EVERYONE is 99 years old. Oops.
+
+  -- This is CORRECT:
+  UPDATE students SET age = 99 WHERE name = 'Juan';
+  -- Only Juan is affected.
+
+You can change more than one thing at a time:
+
+  UPDATE students SET age = 14, city = 'Harlem' WHERE name = 'Kevin';
+
+
+========================================
+6. DELETE (Removing Data)
+========================================
+
+DELETE removes rows from a table.
+
+  DELETE FROM students WHERE name = 'Kevin';
+
+Translation: "Remove Kevin from the students table."
+
+Same rule as UPDATE — ALWAYS use WHERE.
+
+  -- DANGEROUS:
+  DELETE FROM students;
+  -- This deletes EVERY student. The whole table is now empty.
+
+  -- CORRECT:
+  DELETE FROM students WHERE id = 3;
+  -- Only deletes the student with id 3.
+
+
+========================================
+7. ORDER BY (Sorting Results)
+========================================
+
+ORDER BY sorts your results.
+
+  SELECT * FROM students ORDER BY name;
+
+This shows all students sorted A to Z by name.
+
+  SELECT * FROM students ORDER BY age DESC;
+
+DESC means "descending" — biggest to smallest (or Z to A).
+The default is ASC (ascending — smallest to biggest, A to Z).
+
+  SELECT name, age FROM students ORDER BY age ASC;
+
+Result:
+  +----------+-----+
+  | name     | age |
+  +----------+-----+
+  | Kevin    |  11 |
+  | Juan     |  12 |
+  | Maria    |  12 |
+  | Sofia    |  13 |
+  | Ismael   |  30 |
+  +----------+-----+
+
+
+========================================
+8. COUNT, SUM, AVG (Math on Data)
+========================================
+
+SQL can do math on your data. These are called "aggregate functions."
+
+  SELECT COUNT(*) FROM students;
+  -- How many students are there? Answer: 5
+
+  SELECT AVG(age) FROM students;
+  -- What is the average age? Answer: 15.6
+
+  SELECT SUM(age) FROM students;
+  -- What is the total of all ages added together?
+
+  SELECT MIN(age) FROM students;
+  -- What is the youngest age? Answer: 11
+
+  SELECT MAX(age) FROM students;
+  -- What is the oldest age? Answer: 30
+
+You can combine these with WHERE:
+
+  SELECT COUNT(*) FROM students WHERE city = 'Queens';
+  -- How many students are from Queens? Answer: 1
+
+  SELECT AVG(age) FROM students WHERE age < 20;
+  -- Average age of students under 20
+
+
+========================================
+9. LIKE (Searching for Patterns)
+========================================
+
+LIKE lets you search for patterns instead of exact matches.
+
+  SELECT * FROM students WHERE name LIKE 'J%';
+  -- Find students whose name starts with J
+
+  SELECT * FROM students WHERE city LIKE '%ork%';
+  -- Find students whose city contains "ork" (matches "New York")
+
+The % is a wildcard — it means "anything can go here."
+
+  'J%'     = starts with J
+  '%a'     = ends with a
+  '%an%'   = contains "an" anywhere
+
+
+========================================
+10. CREATE TABLE (Building a Table)
+========================================
+
+Before you can put data in, you need a table. Here's how to make one:
+
+  CREATE TABLE students (
+      id    INTEGER PRIMARY KEY,
+      name  TEXT NOT NULL,
+      age   INTEGER,
+      city  TEXT
+  );
+
+Translation:
+  - Make a table called "students"
+  - It has 4 columns: id, name, age, city
+  - id is a number and is the PRIMARY KEY (unique identifier)
+  - name is text and NOT NULL (you MUST fill it in)
+  - age is a number
+  - city is text
+
+Common data types:
+  INTEGER   = whole numbers (1, 2, 100)
+  TEXT      = words and sentences
+  REAL      = decimal numbers (3.14, 99.99)
+  BOOLEAN   = true or false
+
+
+========================================
+11. PUTTING IT ALL TOGETHER
+========================================
+
+Let's build a small database for a school store:
+
+  -- Step 1: Create the table
+  CREATE TABLE store (
+      id     INTEGER PRIMARY KEY,
+      item   TEXT NOT NULL,
+      price  REAL,
+      stock  INTEGER
+  );
+
+  -- Step 2: Add some items
+  INSERT INTO store (item, price, stock) VALUES ('Pencil', 0.50, 100);
+  INSERT INTO store (item, price, stock) VALUES ('Notebook', 2.99, 50);
+  INSERT INTO store (item, price, stock) VALUES ('Eraser', 0.75, 80);
+  INSERT INTO store (item, price, stock) VALUES ('Backpack', 25.00, 10);
+  INSERT INTO store (item, price, stock) VALUES ('Water Bottle', 5.99, 30);
+
+  -- Step 3: Ask questions about the data
+
+  -- What's the most expensive item?
+  SELECT item, price FROM store ORDER BY price DESC LIMIT 1;
+  -- Answer: Backpack, $25.00
+
+  -- How many items cost less than $3?
+  SELECT COUNT(*) FROM store WHERE price < 3.00;
+  -- Answer: 3
+
+  -- What is the total value of all pencils in stock?
+  SELECT price * stock AS total_value FROM store WHERE item = 'Pencil';
+  -- Answer: $50.00
+
+  -- Show everything sorted by price, cheapest first
+  SELECT * FROM store ORDER BY price ASC;
+
+
+========================================
+  QUICK REFERENCE CARD
+========================================
+
+  COMMAND         WHAT IT DOES                    EXAMPLE
+  --------------- ------------------------------- --------------------------------
+  SELECT          Show data                       SELECT * FROM students;
+  WHERE           Filter rows                     WHERE age > 12
+  INSERT INTO     Add a new row                   INSERT INTO students (name) ...
+  UPDATE          Change existing data            UPDATE students SET age = 13 ...
+  DELETE          Remove a row                    DELETE FROM students WHERE ...
+  ORDER BY        Sort results                    ORDER BY name ASC
+  COUNT(*)        Count rows                      SELECT COUNT(*) FROM students;
+  AVG()           Average of a column             SELECT AVG(age) FROM students;
+  SUM()           Total of a column               SELECT SUM(price) FROM store;
+  MIN() / MAX()   Smallest / biggest value        SELECT MIN(age) FROM students;
+  LIKE            Pattern matching                WHERE name LIKE 'J%'
+  LIMIT           Only show first N results       ORDER BY price LIMIT 5
+  CREATE TABLE    Make a new table                CREATE TABLE name (...)
+  PRIMARY KEY     Unique row identifier           id INTEGER PRIMARY KEY
+  NOT NULL        Column can't be empty           name TEXT NOT NULL
+
+
+========================================
+  WHAT TO PRACTICE
+========================================
+
+You can practice SQL for free online at:
+  - https://www.w3schools.com/sql/trysql.asp?filename=trysql_select_all
+  - https://sqlzoo.net
+
+Try these exercises:
+
+  1. Create a table for your favorite movies (title, year, rating)
+  2. Insert 5 movies into it
+  3. Select only movies rated above 8
+  4. Sort them by year, newest first
+  5. Count how many movies you added
+  6. Find the average rating
+  7. Update the rating of one movie
+  8. Delete the oldest movie
+
+That's it. You now know enough SQL to work with real data.
+
+========================================
+
+Written by RRC for Juan (and Ismael's refresher) — Pursuit 2026

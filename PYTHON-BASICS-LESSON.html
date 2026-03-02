@@ -1,0 +1,385 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#222;max-width:700px;margin:0 auto;padding:40px}h1{font-size:26px;border-bottom:2px solid #333;padding-bottom:8px}h2{font-size:20px;margin-top:28px}h3{font-size:16px}code{background:#f0f0f0;padding:2px 5px;border-radius:3px;font-size:12px}pre{background:#2d2d2d;color:#f8f8f2;padding:14px;border-radius:6px;font-size:12px;overflow-x:auto}pre code{background:none;color:inherit;padding:0}table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid #ddd;padding:7px 10px;font-size:12px}th{background:#f0f0f0}hr{border:none;border-top:1px solid #ddd;margin:24px 0}</style></head><body><h1>Python Basics — Start Here</h1>
+<h2>For Juan (and Ismael's refresher)</h2>
+<hr />
+<h2>What Is Python?</h2>
+<p>Python is a language you use to talk to your computer. Just like you speak English to talk to people, you write Python to tell your computer what to do.</p>
+<p>The computer reads your instructions one line at a time, top to bottom, like reading a book.</p>
+<hr />
+<h2>1. Printing (Talking to the Screen)</h2>
+<p>The first thing you learn in any language is how to say something.</p>
+<pre><code class="language-python">print(&quot;Hello&quot;)
+</code></pre>
+<p>That's it. <code>print()</code> tells the computer: "show this on the screen."</p>
+<p>Whatever you put inside the parentheses and quotes, it shows up.</p>
+<pre><code class="language-python">print(&quot;My name is Juan&quot;)
+print(&quot;I am learning Python&quot;)
+print(&quot;This is not that hard&quot;)
+</code></pre>
+<p><strong>Try it:</strong> Change what's inside the quotes. Run it. See what happens.</p>
+<p><strong>The rule:</strong> Text always goes in quotes. Numbers don't.</p>
+<pre><code class="language-python">print(&quot;Hello&quot;)      # text needs quotes
+print(42)            # numbers don't
+print(&quot;I am&quot;, 25)   # you can mix them with a comma
+</code></pre>
+<hr />
+<h2>2. Variables (Giving Names to Things)</h2>
+<p>A variable is a label you stick on something so you can use it later.</p>
+<pre><code class="language-python">name = &quot;Juan&quot;
+age = 25
+city = &quot;New York&quot;
+</code></pre>
+<p>Now instead of typing "Juan" every time, you just say <code>name</code>:</p>
+<pre><code class="language-python">print(name)          # shows: Juan
+print(age)           # shows: 25
+print(&quot;Hi my name is&quot;, name, &quot;and I live in&quot;, city)
+</code></pre>
+<p><strong>Think of it like this:</strong> Variables are like labeled boxes. You put something in the box, slap a name on it, and grab it whenever you need it.</p>
+<pre><code class="language-python"># You can change what's in the box
+score = 10
+print(score)         # shows: 10
+
+score = 20
+print(score)         # shows: 20 (the old 10 is gone)
+</code></pre>
+<p><strong>The rules:</strong>
+- Variable names can't have spaces (use <code>my_name</code> not <code>my name</code>)
+- Variable names can't start with a number (<code>2cool</code> won't work, <code>cool2</code> will)
+- Python cares about CAPS — <code>Name</code> and <code>name</code> are two different boxes</p>
+<hr />
+<h2>3. Math (Python Is a Calculator)</h2>
+<p>Python does math exactly like a calculator:</p>
+<pre><code class="language-python">print(5 + 3)         # 8        addition
+print(10 - 4)        # 6        subtraction
+print(6 * 7)         # 42       multiplication
+print(20 / 4)        # 5.0      division
+</code></pre>
+<p>You can save math results in variables:</p>
+<pre><code class="language-python">price = 10
+tax = 2
+total = price + tax
+print(total)         # 12
+</code></pre>
+<p>You can use variables in math just like numbers:</p>
+<pre><code class="language-python">hours = 8
+pay_per_hour = 15
+daily_pay = hours * pay_per_hour
+print(&quot;You made $&quot;, daily_pay, &quot;today&quot;)    # You made $ 120 today
+</code></pre>
+<p><strong>Bonus operators:</strong></p>
+<pre><code class="language-python">print(10 ** 2)       # 100      power (10 squared)
+print(10 % 3)        # 1        remainder (10 divided by 3 = 3 remainder 1)
+</code></pre>
+<hr />
+<h2>4. Strings (Text)</h2>
+<p>Text in Python is called a <strong>string</strong>. It's always in quotes.</p>
+<pre><code class="language-python">first = &quot;Juan&quot;
+last = &quot;Rodriguez&quot;
+
+# Combine strings with +
+full_name = first + &quot; &quot; + last
+print(full_name)     # Juan Rodriguez
+</code></pre>
+<p>Useful string tricks:</p>
+<pre><code class="language-python">word = &quot;python&quot;
+
+print(word.upper())        # PYTHON
+print(word.lower())        # python
+print(word.capitalize())   # Python
+print(len(word))           # 6 (counts the letters)
+</code></pre>
+<p><strong>f-strings</strong> — the easy way to mix variables into text:</p>
+<pre><code class="language-python">name = &quot;Juan&quot;
+age = 25
+print(f&quot;My name is {name} and I am {age} years old&quot;)
+# My name is Juan and I am 25 years old
+</code></pre>
+<p>The <code>f</code> before the quote means "I'm going to put variables inside curly braces." Way easier than using commas.</p>
+<hr />
+<h2>5. Lists (A Collection of Things)</h2>
+<p>A list is exactly what it sounds like — a list of items.</p>
+<pre><code class="language-python">fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;mango&quot;]
+numbers = [10, 20, 30, 40, 50]
+</code></pre>
+<p><strong>Getting items from a list:</strong></p>
+<p>Python counts starting from 0, not 1. (Weird, but you get used to it.)</p>
+<pre><code class="language-python">fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;mango&quot;]
+
+print(fruits[0])     # apple     (first item)
+print(fruits[1])     # banana    (second item)
+print(fruits[2])     # mango     (third item)
+</code></pre>
+<p><strong>Changing and adding:</strong></p>
+<pre><code class="language-python">fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;mango&quot;]
+
+fruits.append(&quot;grape&quot;)          # add to the end
+print(fruits)                   # [&quot;apple&quot;, &quot;banana&quot;, &quot;mango&quot;, &quot;grape&quot;]
+
+fruits[0] = &quot;strawberry&quot;        # replace the first one
+print(fruits)                   # [&quot;strawberry&quot;, &quot;banana&quot;, &quot;mango&quot;, &quot;grape&quot;]
+
+print(len(fruits))              # 4 (how many items)
+</code></pre>
+<hr />
+<h2>6. If/Else (Making Decisions)</h2>
+<p>This is how your program makes choices.</p>
+<pre><code class="language-python">age = 18
+
+if age &gt;= 18:
+    print(&quot;You can vote&quot;)
+else:
+    print(&quot;Too young to vote&quot;)
+</code></pre>
+<p><strong>How to read this:</strong> "If age is 18 or more, print 'You can vote.' Otherwise, print 'Too young to vote.'"</p>
+<p>More options with <code>elif</code> (short for "else if"):</p>
+<pre><code class="language-python">grade = 85
+
+if grade &gt;= 90:
+    print(&quot;A&quot;)
+elif grade &gt;= 80:
+    print(&quot;B&quot;)
+elif grade &gt;= 70:
+    print(&quot;C&quot;)
+else:
+    print(&quot;F&quot;)
+</code></pre>
+<p><strong>The comparison symbols:</strong></p>
+<pre><code>==    equals              (5 == 5 is True)
+!=    not equal           (5 != 3 is True)
+&gt;     greater than        (10 &gt; 5 is True)
+&lt;     less than           (3 &lt; 7 is True)
+&gt;=    greater or equal    (5 &gt;= 5 is True)
+&lt;=    less or equal       (3 &lt;= 7 is True)
+</code></pre>
+<p><strong>IMPORTANT:</strong> One <code>=</code> means "put this value in the box." Two <code>==</code> means "are these equal?"</p>
+<pre><code class="language-python">x = 5       # putting 5 in the box called x
+x == 5      # asking: is x equal to 5? (True)
+</code></pre>
+<hr />
+<h2>7. Loops (Doing Something Over and Over)</h2>
+<h3>For Loop — "Do this for each thing in the list"</h3>
+<pre><code class="language-python">fruits = [&quot;apple&quot;, &quot;banana&quot;, &quot;mango&quot;]
+
+for fruit in fruits:
+    print(fruit)
+</code></pre>
+<p>Output:</p>
+<pre><code>apple
+banana
+mango
+</code></pre>
+<p><strong>How to read this:</strong> "For each fruit in the fruits list, print it."</p>
+<p>You can loop through numbers too:</p>
+<pre><code class="language-python">for number in range(5):
+    print(number)
+</code></pre>
+<p>Output:</p>
+<pre><code>0
+1
+2
+3
+4
+</code></pre>
+<p><code>range(5)</code> gives you 0 through 4 (five numbers, starting from 0).</p>
+<h3>While Loop — "Keep doing this as long as something is true"</h3>
+<pre><code class="language-python">count = 0
+
+while count &lt; 5:
+    print(count)
+    count = count + 1
+</code></pre>
+<p>Same output as above. But a while loop keeps going until the condition is false. <strong>Be careful</strong> — if you forget <code>count = count + 1</code>, it loops forever.</p>
+<h3>When to use which?</h3>
+<ul>
+<li><strong>for</strong> — when you know how many times (a list, a range)</li>
+<li><strong>while</strong> — when you don't know how many times (keep going until something happens)</li>
+</ul>
+<hr />
+<h2>8. Functions (Reusable Instructions)</h2>
+<p>A function is a set of instructions you give a name to, so you can use them over and over.</p>
+<pre><code class="language-python">def say_hello():
+    print(&quot;Hello!&quot;)
+    print(&quot;Welcome to Python!&quot;)
+
+say_hello()          # runs the instructions
+say_hello()          # runs them again
+</code></pre>
+<p>Functions can take <strong>inputs</strong> (called parameters):</p>
+<pre><code class="language-python">def greet(name):
+    print(f&quot;Hello {name}!&quot;)
+
+greet(&quot;Juan&quot;)        # Hello Juan!
+greet(&quot;Ismael&quot;)      # Hello Ismael!
+greet(&quot;Kevin&quot;)       # Hello Kevin!
+</code></pre>
+<p>Functions can <strong>return</strong> a result:</p>
+<pre><code class="language-python">def add(a, b):
+    return a + b
+
+result = add(5, 3)
+print(result)        # 8
+
+total = add(10, 20)
+print(total)         # 30
+</code></pre>
+<p><strong>Think of it like this:</strong> A function is a vending machine. You put something in (the inputs), it does its thing, and something comes out (the return value).</p>
+<hr />
+<h2>9. Dictionaries (Labeled Storage)</h2>
+<p>A dictionary stores pairs of things — a <strong>key</strong> and a <strong>value</strong>. Like a real dictionary: the word is the key, the definition is the value.</p>
+<pre><code class="language-python">person = {
+    &quot;name&quot;: &quot;Juan&quot;,
+    &quot;age&quot;: 25,
+    &quot;city&quot;: &quot;New York&quot;
+}
+
+print(person[&quot;name&quot;])     # Juan
+print(person[&quot;age&quot;])      # 25
+</code></pre>
+<p>Adding and changing:</p>
+<pre><code class="language-python">person[&quot;job&quot;] = &quot;developer&quot;       # add new key
+person[&quot;age&quot;] = 26                # change existing key
+print(person)
+</code></pre>
+<p>Loop through a dictionary:</p>
+<pre><code class="language-python">for key, value in person.items():
+    print(f&quot;{key}: {value}&quot;)
+</code></pre>
+<p>Output:</p>
+<pre><code>name: Juan
+age: 25
+city: New York
+job: developer
+</code></pre>
+<hr />
+<h2>10. Putting It All Together</h2>
+<p>Here's a small program that uses everything above:</p>
+<pre><code class="language-python"># A list of students and their scores
+students = [
+    {&quot;name&quot;: &quot;Juan&quot;, &quot;score&quot;: 85},
+    {&quot;name&quot;: &quot;Ismael&quot;, &quot;score&quot;: 92},
+    {&quot;name&quot;: &quot;Kevin&quot;, &quot;score&quot;: 78}
+]
+
+# Function to check the grade
+def get_grade(score):
+    if score &gt;= 90:
+        return &quot;A&quot;
+    elif score &gt;= 80:
+        return &quot;B&quot;
+    elif score &gt;= 70:
+        return &quot;C&quot;
+    else:
+        return &quot;F&quot;
+
+# Loop through each student and print their grade
+for student in students:
+    name = student[&quot;name&quot;]
+    score = student[&quot;score&quot;]
+    grade = get_grade(score)
+    print(f&quot;{name} scored {score} — Grade: {grade}&quot;)
+</code></pre>
+<p>Output:</p>
+<pre><code>Juan scored 85 — Grade: B
+Ismael scored 92 — Grade: A
+Kevin scored 78 — Grade: C
+</code></pre>
+<hr />
+<h2>Quick Reference Card</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Example</th>
+<th>What It Does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Print</td>
+<td><code>print("hi")</code></td>
+<td>Shows text on screen</td>
+</tr>
+<tr>
+<td>Variable</td>
+<td><code>x = 5</code></td>
+<td>Stores a value</td>
+</tr>
+<tr>
+<td>Math</td>
+<td><code>x + y</code></td>
+<td>Calculator</td>
+</tr>
+<tr>
+<td>String</td>
+<td><code>"hello"</code></td>
+<td>Text</td>
+</tr>
+<tr>
+<td>f-string</td>
+<td><code>f"Hi {name}"</code></td>
+<td>Text with variables</td>
+</tr>
+<tr>
+<td>List</td>
+<td><code>[1, 2, 3]</code></td>
+<td>Collection of things</td>
+</tr>
+<tr>
+<td>Dictionary</td>
+<td><code>{"key": "value"}</code></td>
+<td>Labeled storage</td>
+</tr>
+<tr>
+<td>If/Else</td>
+<td><code>if x &gt; 5:</code></td>
+<td>Make decisions</td>
+</tr>
+<tr>
+<td>For Loop</td>
+<td><code>for x in list:</code></td>
+<td>Do something for each item</td>
+</tr>
+<tr>
+<td>While Loop</td>
+<td><code>while x &lt; 10:</code></td>
+<td>Keep going until condition is false</td>
+</tr>
+<tr>
+<td>Function</td>
+<td><code>def my_func():</code></td>
+<td>Reusable instructions</td>
+</tr>
+<tr>
+<td><code>len()</code></td>
+<td><code>len(my_list)</code></td>
+<td>Count items</td>
+</tr>
+<tr>
+<td><code>range()</code></td>
+<td><code>range(10)</code></td>
+<td>Numbers 0 through 9</td>
+</tr>
+<tr>
+<td><code>append()</code></td>
+<td><code>list.append(x)</code></td>
+<td>Add to end of list</td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td><code>return result</code></td>
+<td>Send a value back from a function</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>What to Practice</h2>
+<p>Open a terminal and type <code>python3</code> to start the Python shell. Try these:</p>
+<ol>
+<li>Make a variable with your name and print it</li>
+<li>Do some math and save the result</li>
+<li>Make a list of 5 things and loop through them</li>
+<li>Write an if/else that checks if a number is positive or negative</li>
+<li>Write a function that takes a name and says hello</li>
+</ol>
+<p>That's it. You now know enough Python to do real things.</p>
+<hr />
+<p><em>Written by RRC for Juan (and Ismael's refresher) — Pursuit 2026</em></p></body></html>
