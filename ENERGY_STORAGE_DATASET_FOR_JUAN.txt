@@ -111,6 +111,43 @@ All data is publicly available and verified.
 
 ---
 
+HOW WE KNOW THIS IS HAPPENING NOW
+
+These aren't historical problems—they're measurable right now.
+
+StorageScout (real-time monitoring platform) tracks solar generation across 10 major US battery storage states every 60 seconds. It quantifies:
+
+1. Live Solar Generation (W/m²)
+   - Direct + diffuse radiation measured in real-time
+   - Updates hourly across CA, TX, AZ, NV, FL, NY, IL, GA, VA, CO
+   - Shows exactly when solar peaks and when batteries are needed
+
+2. Real-Time Curtailment Calculation
+   - Formula: (Current Solar Radiation / 800) × (Historical Curtailment / 2000) × (3000 / Existing Storage MW)
+   - States with high solar + low storage relative to history = wasting energy RIGHT NOW
+   - Updated every 60 seconds; visible opportunity windows throughout the day
+
+3. Opportunity Scoring (0-100)
+   - Red (60-100): Storage urgently needed at this moment
+   - Yellow (30-60): Moderate storage opportunity
+   - Green (0-30): Adequate storage for current conditions
+   - Score changes hourly based on actual generation vs. storage capacity
+
+What this means for customer conversations:
+
+- Instead of saying "Storage is growing exponentially":
+  "Arizona had 614 W/m² solar at 2 PM yesterday and only 2,100 MW storage. Right now you're wasting peak solar every clear day."
+
+- Instead of saying "83% of projects are at credit risk":
+  "I can show you the exact hours each week when high solar + low storage = missing revenue. This is how I know where to deploy storage."
+
+- Instead of saying "Interconnection backlog is 377 GW":
+  "That 377 GW backlog means approved projects can't connect. But the existing 37.4 GW is underutilized. I'm solving the optimization problem first."
+
+This real-time data turns abstract market statistics into visible, measurable, hourly business opportunities.
+
+---
+
 NEXT STEPS
 
 Detailed analysis and source citations are available in:

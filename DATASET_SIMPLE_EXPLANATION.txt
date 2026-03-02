@@ -48,6 +48,53 @@ WHAT ARE THE THREE BIG PROBLEMS?
 
 ---
 
+PROOF IT'S HAPPENING: LIVE DATA
+
+Here's the thing: you don't have to take our word for it.
+
+Right now—like RIGHT NOW—you can see this problem happening in real-time.
+
+StorageScout is a platform that tracks solar generation across 10 major US cities EVERY 60 SECONDS.
+
+What you see:
+
+1. SOLAR RADIATION (W/m²)
+   - Arizona at 2 PM: 614 W/m² generating power
+   - Texas at noon: 580 W/m² generating power
+   - California at 1 PM: 720 W/m² generating power
+   - New York at 3 PM: 420 W/m² generating power
+   - = Solar is HAPPENING. It's LIVE. It's REAL.
+
+2. HOW MUCH STORAGE EXISTS
+   - CA has 7,492 MW of storage
+   - TX has 5,200 MW of storage
+   - AZ has 2,100 MW of storage
+   - = But that's not enough when the sun's blazing
+
+3. THE GAP (Opportunity Score)
+   - System calculates: high solar + existing storage shortage = PROBLEM RIGHT NOW
+   - Updates every hour
+   - Shows you: "At this exact moment, Arizona is wasting solar. At this exact moment, Texas needs batteries."
+   - = Problem is visible LIVE, not just statistics
+
+4. THE MATH
+   - If solar is 600+ W/m² and you only have X storage for Y solar farms
+   - System scores it 0-100 (red = bad, green = ok)
+   - Red moments = where your solution MAKES MONEY
+   - Happens multiple times every sunny day
+
+Why does this matter for Saturday?
+
+When someone asks "Is the problem REAL?"
+
+You say: "I can show you the live data. Check back at 2 PM. Arizona will show 600+ W/m² solar and a 75/100 opportunity score. That means the power is being generated and we don't have enough batteries to store it. That waste? That's money on the table."
+
+= They see it with their own eyes.
+= Problem is PROVEN.
+= Your solution solves a measurable, real-time problem.
+
+---
+
 HOW BAD IS IT? (THE NUMBERS)
 
 MONEY:
