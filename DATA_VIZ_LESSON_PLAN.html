@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Lesson Plan - 8th Grade Level</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+        }
+        .section {
+            background: white;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            color: #667eea;
+            margin-top: 0;
+            font-size: 1.8em;
+        }
+        .person-box {
+            background: #f9f9f9;
+            border: 3px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            page-break-inside: avoid;
+        }
+        .person-box h3 {
+            color: #764ba2;
+            margin-top: 0;
+            font-size: 1.4em;
+        }
+        .person-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .concept-box {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #17a2b8;
+        }
+        .concept-box strong {
+            color: #0c5460;
+        }
+        .example-box {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .example-box strong {
+            color: #856404;
+        }
+        .highlight {
+            background-color: #fffacd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .timeline {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .timeline-item {
+            display: flex;
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+        .time {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            min-width: 100px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .activity {
+            flex: 1;
+        }
+        .success-checklist {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success-checklist h3 {
+            color: #155724;
+            margin-top: 0;
+        }
+        .success-checklist ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .success-checklist li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .success-checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .vocabulary {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #666;
+        }
+        .vocabulary strong {
+            color: #333;
+        }
+        .tip-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .page-break {
+            page-break-after: always;
+        }
+        @media print {
+            body {
+                background-color: white;
+            }
+            .section, .person-box, .timeline, .success-checklist, .example-box, .concept-box {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💻 Learn to Show Your Data!</h1>
+        <p>A Data Visualization Lesson Plan for Beginners</p>
+    </div>
+
+    <div class="section">
+        <h2>🎯 What Is This Class About?</h2>
+        <p>Have you ever wondered how to show information in a cool, visual way? Like how Netflix shows your watch history with a line going up and down, or how a pie chart shows what kinds of pizza people like?</p>
+        
+        <p>In this class, you'll learn to create <span class="highlight">5 different types of visual charts</span>. Each person in the group will become an expert in ONE type of chart. By the end, you'll combine everything into a mini dashboard (a page with all your charts together).</p>
+
+        <div class="vocabulary">
+            <strong>📚 New Word:</strong> A <strong>visualization</strong> is a picture or chart that shows information instead of just using numbers and words.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>👥 Meet Your 5 Chart Experts</h2>
+        
+        <div class="person-box">
+            <span class="person-number">PERSON 1</span>
+            <h3>📈 Trends Over Time</h3>
+            <p><strong>Your superpower:</strong> Show how something changes day by day, week by week, or month by month.</p>
+            
+            <div class="concept-box">
+                <strong>What you'll create:</strong> A LINE CHART (like a video game health bar that goes up and down)
+            </div>
+
+            <p><strong>Real-life examples you know:</strong></p>
+            <ul>
+                <li>Your grade getting better as the semester goes on</li>
+                <li>Temperature going from cold to hot during the day</li>
+                <li>Views on a TikTok video going up over the first week</li>
+                <li>Followers on Instagram increasing over months</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>💡 Sample project:</strong> Track how many messages are sent each day for 2 weeks. Show the busy days and slow days!
+            </div>
+
+            <p><strong>Cool things you can add:</strong></p>
+            <ul>
+                <li>When you hover over the line, it shows the exact number</li>
+                <li>Different colors for different types of data</li>
+                <li>A smooth line that shows the overall "trend" (is it going up or down?)</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <span class="person-number">PERSON 2</span>
+            <h3>📊 Comparisons</h3>
+            <p><strong>Your superpower:</strong> Show which thing is bigger, smaller, or better than the others.</p>
+            
+            <div class="concept-box">
+                <strong>What you'll create:</strong> A BAR CHART (like when you line up your friends by height)
+            </div>
+
+            <p><strong>Real-life examples you know:</strong></p>
+            <ul>
+                <li>Which fast-food restaurant is most popular in your school</li>
+                <li>Comparing test scores of different classes</li>
+                <li>How much screen time each social media app gets (TikTok vs. Instagram vs. YouTube)</li>
+                <li>Comparing heights of different basketball players</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>💡 Sample project:</strong> Compare how many messages are "Urgent," "Medium," and "Not Urgent." Show which type is most common!
+            </div>
+
+            <p><strong>Cool things you can add:</strong></p>
+            <ul>
+                <li>Color each bar differently to make it fun</li>
+                <li>Show numbers on top of each bar so people know the exact amount</li>
+                <li>Make bars horizontal or vertical—whatever looks best</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <span class="person-number">PERSON 3</span>
+            <h3>📌 Distribution Analysis</h3>
+            <p><strong>Your superpower:</strong> Show how many things fall into different groups or size ranges.</p>
+            
+            <div class="concept-box">
+                <strong>What you'll create:</strong> A HISTOGRAM (imagine sorting candy by weight or organizing people by age groups)
+            </div>
+
+            <p><strong>Real-life examples you know:</strong></p>
+            <ul>
+                <li>How many students got A's, B's, C's, D's, and F's on a test</li>
+                <li>Sorting movies by length (short, medium, long)</li>
+                <li>How many minutes people spend on homework (30 min, 60 min, 90 min, etc.)</li>
+                <li>Shoe sizes in your grade—how many wear size 6, 7, 8, 9, 10?</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>💡 Sample project:</strong> Look at how long messages are. How many are short (1-10 words)? Medium (11-20 words)? Long (21+ words)?
+            </div>
+
+            <p><strong>Cool things you can add:</strong></p>
+            <ul>
+                <li>Show the "most common" group in a different color</li>
+                <li>Add a line showing the average</li>
+                <li>Highlight anything unusual or surprising</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <span class="person-number">PERSON 4</span>
+            <h3>🎯 Correlations</h3>
+            <p><strong>Your superpower:</strong> Show if two things are connected or related to each other.</p>
+            
+            <div class="concept-box">
+                <strong>What you'll create:</strong> A SCATTER PLOT (dots scattered on a graph—like stars in the sky)
+            </div>
+
+            <p><strong>Real-life examples you know:</strong></p>
+            <ul>
+                <li>Do students who study more get higher grades? (probably yes!)</li>
+                <li>Do taller people weigh more? (usually yes)</li>
+                <li>Do videos with more likes also have more comments? (usually yes)</li>
+                <li>Do people who drink more water feel healthier? (maybe!)</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>💡 Sample project:</strong> For each message, check:
+                <ul>
+                    <li>How long is it? (X axis)</li>
+                    <li>How quick was the response time? (Y axis)</li>
+                </ul>
+                Do longer messages get slower responses? Let's see!
+            </div>
+
+            <p><strong>Cool things you can add:</strong></p>
+            <ul>
+                <li>Use a "best fit line" to show the overall relationship</li>
+                <li>Color the dots by a third thing (like urgency level)</li>
+                <li>Make bigger dots if something is super important</li>
+            </ul>
+
+            <div class="vocabulary">
+                <strong>📚 New Word:</strong> A <strong>correlation</strong> means two things tend to change together. Like "more studying" correlates with "better grades."
+            </div>
+        </div>
+
+        <div class="person-box">
+            <span class="person-number">PERSON 5</span>
+            <h3>🍰 Segmentation</h3>
+            <p><strong>Your superpower:</strong> Show what percentage each group gets out of the total (like dividing a pizza into slices).</p>
+            
+            <div class="concept-box">
+                <strong>What you'll create:</strong> A PIE CHART or DONUT CHART (the kind of chart your parents use to show household budgets)
+            </div>
+
+            <p><strong>Real-life examples you know:</strong></p>
+            <ul>
+                <li>How your time is divided: school, sleep, homework, fun (24 hours total)</li>
+                <li>What percentage of your money goes to: snacks, games, savings</li>
+                <li>Different types of students: athletes, gamers, artists, bookworms</li>
+                <li>Your phone battery: Social media apps vs. games vs. school apps vs. other</li>
+            </ul>
+
+            <div class="example-box">
+                <strong>💡 Sample project:</strong> Divide all messages into groups:
+                <ul>
+                    <li>Messages about homework</li>
+                    <li>Messages about fun things</li>
+                    <li>Messages asking for help</li>
+                    <li>Messages that are jokes</li>
+                </ul>
+                Show what slice each gets!
+            </div>
+
+            <p><strong>Cool things you can add:</strong></p>
+            <ul>
+                <li>Different colors for each slice</li>
+                <li>Show the percentage or number on each slice</li>
+                <li>Make it fancy by separating out one slice</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📐 The Math Behind Each Chart (Don't Worry—It's Simple!)</h2>
+
+        <div class="person-box">
+            <h3>PERSON 1: Trends Over Time - The Math</h3>
+            <p><strong>Math concept:</strong> You're plotting (X, Y) coordinates on a graph.</p>
+            
+            <div class="concept-box">
+                <strong>X-axis (horizontal):</strong> Time (day 1, day 2, day 3...)<br>
+                <strong>Y-axis (vertical):</strong> Your measurement (messages sent)
+            </div>
+
+            <p><strong>Example with real numbers:</strong></p>
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+Day 1: 10 messages  →  Point at (1, 10)
+Day 2: 15 messages  →  Point at (2, 15)
+Day 3: 12 messages  →  Point at (3, 12)
+Day 4: 18 messages  →  Point at (4, 18)
+
+Connect the dots and you can SEE the trend!
+            </pre>
+
+            <p><strong>Visual:</strong></p>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em;">
+     Messages
+        20 |       📊
+           |      /  \
+        15 |    📊    📊
+           |   /        \
+        10 | 📊          📊
+           |____________________
+             Day 1 2 3 4 5 6 7
+            </pre>
+        </div>
+
+        <div class="person-box">
+            <h3>PERSON 2: Comparisons - The Math</h3>
+            <p><strong>Math concept:</strong> Comparing quantities using the same scale.</p>
+            
+            <p><strong>Example with real numbers:</strong></p>
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+Urgent messages:  15
+Medium messages:  32
+Low messages:     18
+
+Make a bar for each one, and see which is tallest!
+            </pre>
+
+            <p><strong>Visual:</strong></p>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em;">
+Count
+  35 |
+  30 |     ████
+  25 |     ████
+  20 | ██  ████  ██
+  15 | ██  ████  ██
+  10 | ██  ████  ██
+   5 | ██  ████  ██
+   0 |_██__████__██_
+     Urg Med Low
+            </pre>
+
+            <p><strong>Bonus Math:</strong> You can calculate a <strong>percentage</strong>:</p>
+            <div class="vocabulary">
+                Total messages = 15 + 32 + 18 = 65<br>
+                Medium % = (32 ÷ 65) × 100 = 49%<br>
+                <em>Translation: Nearly HALF of all messages are medium urgency!</em>
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>PERSON 3: Distribution - The Math</h3>
+            <p><strong>Math concept:</strong> Grouping data into "bins" (ranges) and counting.</p>
+            
+            <p><strong>Example with real numbers:</strong></p>
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+Message lengths: 5, 12, 8, 23, 15, 9, 31, 7, 14, 11, 25, 6
+
+Sort into groups:
+- Very short (1-7 words):    5, 7, 6           = 3 messages
+- Short (8-14 words):        12, 8, 9, 14, 11  = 5 messages
+- Medium (15-21 words):      15                = 1 message
+- Long (22-28 words):        23, 25            = 2 messages
+- Very long (29+ words):     31                = 1 message
+            </pre>
+
+            <p><strong>Visual:</strong></p>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em;">
+Frequency
+   6 |
+   5 |     ████
+   4 |     ████
+   3 | ████ ████
+   2 | ████ ████  ██
+   1 | ████ ████  ██   █   █
+   0 |_1-7_8-14_15-21_22-28_29+_
+        Word Length Ranges
+            </pre>
+
+            <p><strong>Key Insight:</strong> Most messages are in the "Short" category. That tells us something!</p>
+        </div>
+
+        <div class="person-box">
+            <h3>PERSON 4: Correlations - The Math</h3>
+            <p><strong>Math concept:</strong> Do two things change together? This is called "correlation".</p>
+            
+            <p><strong>Example with real numbers:</strong></p>
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+Message Length  | Response Time
+5 words         | 2 minutes
+12 words        | 5 minutes
+8 words         | 3 minutes
+23 words        | 8 minutes
+15 words        | 6 minutes
+31 words        | 10 minutes
+
+Pattern: Longer messages → longer response times!
+            </pre>
+
+            <p><strong>Visual:</strong></p>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em;">
+Response
+Time (min)
+   10 |                    ●
+    8 |              ●
+    6 |        ●
+    4 |     ●
+    2 | ●
+    0 |___________________●___
+      0  5 10 15 20 25 30 35
+        Message Length (words)
+
+Notice: Dots go from bottom-left to top-right
+= POSITIVE correlation!
+            </pre>
+
+            <p><strong>Correlation Types:</strong></p>
+            <ul>
+                <li><strong>Positive:</strong> Both go up together 📈 (like study time and grades)</li>
+                <li><strong>Negative:</strong> One goes up, other goes down 📉 (like screen time and sleep)</li>
+                <li><strong>No correlation:</strong> Random dots ⚫ (like shoe size and math grades)</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <h3>PERSON 5: Segmentation - The Math</h3>
+            <p><strong>Math concept:</strong> Breaking a whole into parts and showing percentages.</p>
+            
+            <p><strong>Example with real numbers:</strong></p>
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+Total messages in one week: 100
+- Homework-related:  35 messages
+- Fun stuff:         25 messages
+- Asking for help:   20 messages
+- Jokes:             20 messages
+
+Convert to percentages (part ÷ whole × 100):
+- Homework: (35 ÷ 100) × 100 = 35%
+- Fun:      (25 ÷ 100) × 100 = 25%
+- Help:     (20 ÷ 100) × 100 = 20%
+- Jokes:    (20 ÷ 100) × 100 = 20%
+
+Check: 35 + 25 + 20 + 20 = 100% ✓
+            </pre>
+
+            <p><strong>Visual:</strong></p>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd; font-size: 0.9em;">
+        Homework 35%
+       /            \
+    Fun           Help
+    25%           20%
+      \          /
+       \        /
+        Jokes 20%
+
+Pie chart divides the whole into slices!
+            </pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>⏰ Here's How Our 90-Minute Class Will Work</h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time">0-10 min</div>
+                <div class="activity">
+                    <strong>WELCOME & INTRODUCTION</strong><br>
+                    Watch a few real-world examples. Learn why charts are awesome. Get your data (the information you'll use).
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">10-20 min</div>
+                <div class="activity">
+                    <strong>PICK YOUR ROLE</strong><br>
+                    Each person chooses which chart type they want to create. Look at examples. Understand your assignment.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">20-60 min</div>
+                <div class="activity">
+                    <strong>BUILD TIME! 💪</strong><br>
+                    This is when YOU create your chart. Your teacher will help if you get stuck. Ask questions! Make it look good!
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">60-75 min</div>
+                <div class="activity">
+                    <strong>SHOW & TELL</strong><br>
+                    Each person shows their chart (3 minutes each). Explain what it shows and why it's cool.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">75-90 min</div>
+                <div class="activity">
+                    <strong>COMBINE & CELEBRATE</strong><br>
+                    Put all 5 charts together into one dashboard. Look at the big picture. High fives all around! 🎉
+                </div>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <strong>💡 Pro Tip:</strong> Raise your hand if you're confused. Everyone in this class is learning. Your teacher WANTS to help!
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🛠️ What You'll Actually Do</h2>
+        
+        <p>Here's what the actual building process looks like:</p>
+
+        <div class="tip-box" style="background: #fff3cd; border-left: 4px solid #ffc107;">
+            <strong>You have OPTIONS:</strong>
+            <ul>
+                <li><strong>Easy Way:</strong> Use an online chart maker (no coding needed!)</li>
+                <li><strong>Cool Way:</strong> Learn a little bit of Python (we'll show you exactly what to type)</li>
+            </ul>
+        </div>
+
+        <h3>🖱️ Option 1: Easy Way (Using Chart Makers)</h3>
+        <ol>
+            <li>Get your data file with information (like a spreadsheet)</li>
+            <li>Open an online tool like Recharts or Chart.js</li>
+            <li>Pick your chart type from a menu</li>
+            <li>Paste your data into the tool</li>
+            <li>Customize colors and labels</li>
+            <li>Save and show it off!</li>
+        </ol>
+
+        <h3>🐍 Option 2: Cool Way (Using Python - Don't Worry, It's Easy!)</h3>
+        <p>Python is a programming language that's super beginner-friendly. It reads almost like English! Let me show you.</p>
+
+        <div class="example-box">
+            <strong>📊 PERSON 1: Line Chart (Trends Over Time) - Python Code</strong>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd;"><code>import matplotlib.pyplot as plt
+
+# Our data: messages sent each day
+days = [1, 2, 3, 4, 5, 6, 7]
+messages = [10, 15, 12, 18, 22, 20, 25]
+
+# Create the line chart
+plt.plot(days, messages, marker='o', color='blue', linewidth=2)
+plt.xlabel('Day Number')
+plt.ylabel('Number of Messages')
+plt.title('Messages Over 1 Week')
+plt.grid(True)  # Add helpful grid lines
+plt.show()
+
+# In English: "Plot day numbers on bottom, message counts on side,
+# make it blue, connect dots with lines, add labels, and show it!"</code></pre>
+        </div>
+
+        <div class="vocabulary">
+            <strong>What's happening?</strong>
+            <ul>
+                <li><code>import matplotlib</code> = "Bring in a tool that makes charts"</li>
+                <li><code>days = [1, 2, 3...]</code> = "Create a list of numbers"</li>
+                <li><code>plt.plot()</code> = "Draw lines connecting the dots"</li>
+                <li><code>plt.show()</code> = "Display the chart"</li>
+            </ul>
+        </div>
+
+        <div class="example-box">
+            <strong>📊 PERSON 2: Bar Chart (Comparisons) - Python Code</strong>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd;"><code>import matplotlib.pyplot as plt
+
+# Our data: how many messages of each type
+categories = ['Urgent', 'Medium', 'Low']
+counts = [15, 32, 18]
+colors = ['red', 'orange', 'green']
+
+# Create the bar chart
+plt.bar(categories, counts, color=colors)
+plt.ylabel('Number of Messages')
+plt.title('Messages by Urgency Level')
+plt.show()
+
+# In English: "Make bars for each category.
+# Red bar for urgent, orange for medium, green for low."</code></pre>
+        </div>
+
+        <div class="example-box">
+            <strong>📊 PERSON 3: Histogram (Distribution) - Python Code</strong>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd;"><code>import matplotlib.pyplot as plt
+
+# Our data: length of each message (in words)
+message_lengths = [5, 12, 8, 23, 15, 9, 31, 7, 14, 11, 25, 6]
+
+# Create histogram (bins = groups by size)
+plt.hist(message_lengths, bins=5, color='purple', edgecolor='black')
+plt.xlabel('Message Length (words)')
+plt.ylabel('How Many Messages')
+plt.title('Message Length Distribution')
+plt.show()
+
+# In English: "Sort all messages by length.
+# Group them into 5 size ranges and count how many in each group."</code></pre>
+        </div>
+
+        <div class="example-box">
+            <strong>📊 PERSON 4: Scatter Plot (Correlations) - Python Code</strong>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd;"><code>import matplotlib.pyplot as plt
+
+# Our data: message length vs response time
+message_length = [5, 12, 8, 23, 15, 9, 31]
+response_time = [2, 5, 3, 8, 6, 4, 10]  # in minutes
+
+# Create scatter plot (dots instead of lines)
+plt.scatter(message_length, response_time, color='blue', s=100)
+plt.xlabel('Message Length (words)')
+plt.ylabel('Response Time (minutes)')
+plt.title('Does Longer = Slower Responses?')
+plt.show()
+
+# In English: "Dot for each message. Left-right = message length.
+# Up-down = how long until they responded.
+# If dots go up-right = correlation!"</code></pre>
+        </div>
+
+        <div class="example-box">
+            <strong>📊 PERSON 5: Pie Chart (Segmentation) - Python Code</strong>
+            <pre style="background: #fff; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd;"><code>import matplotlib.pyplot as plt
+
+# Our data: message categories
+categories = ['Homework', 'Fun', 'Help', 'Jokes']
+sizes = [35, 25, 20, 20]  # percentages
+colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99']
+
+# Create pie chart
+plt.pie(sizes, labels=categories, colors=colors, autopct='%1.1f%%')
+plt.title('Types of Messages')
+plt.show()
+
+# In English: "Make pie slices. Each slice is a category.
+# autopct shows the % inside each slice."</code></pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>💻 How to Run Python Code (It's Easier Than You Think!)</h2>
+        
+        <p>Python code won't run by itself—you need to do 3 things:</p>
+
+        <div class="person-box">
+            <h3>Step 1: Install Python & Matplotlib</h3>
+            <p>Python is a free tool you download once.</p>
+            
+            <ol>
+                <li>Go to <strong>python.org</strong> and download Python 3.9 or newer</li>
+                <li>Run the installer (click Next → Next → Install)</li>
+                <li>Open Terminal (Mac) or Command Prompt (Windows)</li>
+                <li>Type this command:
+                    <pre style="background: #000; color: #00ff00; padding: 10px; border-radius: 5px; margin: 10px 0;">pip install matplotlib</pre>
+                </li>
+                <li>Wait for it to say "Successfully installed"</li>
+            </ol>
+
+            <div class="vocabulary">
+                <strong>🤔 What's pip?</strong> It's a tool that downloads Python libraries (like matplotlib) for you. Think of it as "the app store for Python."
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Step 2: Create Your Python File</h3>
+            <p>Save your code with a special name so Python knows it's code.</p>
+
+            <ol>
+                <li>Open a text editor (or VS Code)</li>
+                <li>Paste one of the code examples (like Person 1's line chart code)</li>
+                <li>Save the file with a name like: <code>my_chart.py</code> (the <code>.py</code> part is important!)</li>
+                <li>Remember where you saved it</li>
+            </ol>
+        </div>
+
+        <div class="person-box">
+            <h3>Step 3: Run Your Code</h3>
+            <p>Tell Python to run what you wrote.</p>
+
+            <ol>
+                <li>Open Terminal (Mac) or Command Prompt (Windows)</li>
+                <li>Navigate to the folder where you saved your file:
+                    <pre style="background: #000; color: #00ff00; padding: 10px; border-radius: 5px; margin: 10px 0;">cd ~/Desktop  (if saved on Desktop)</pre>
+                </li>
+                <li>Type:
+                    <pre style="background: #000; color: #00ff00; padding: 10px; border-radius: 5px; margin: 10px 0;">python my_chart.py</pre>
+                </li>
+                <li>Press Enter and watch your chart appear! 🎉</li>
+            </ol>
+        </div>
+
+        <div class="tip-box">
+            <strong>💡 Troubleshooting:</strong>
+            <ul>
+                <li><strong>"ModuleNotFoundError: No module named 'matplotlib'"</strong> → Run <code>pip install matplotlib</code> again</li>
+                <li><strong>"command not found: python"</strong> → Python isn't installed yet</li>
+                <li><strong>Nothing happens</strong> → Your computer opened the chart in a window behind other windows. Look for it!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📚 Resources & Helpful Links</h2>
+
+        <div class="person-box">
+            <h3>For This Project:</h3>
+            <ul>
+                <li><strong>Python.org</strong> - Download Python (totally free)</li>
+                <li><strong>Matplotlib Documentation</strong> - How to use the charting tool</li>
+                <li><strong>Replit.com</strong> - Run Python online (no installation needed!)</li>
+                <li><strong>Chart.js</strong> - If you want to use the "easy way"</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <h3>Learn More About Data:</h3>
+            <ul>
+                <li><strong>Khan Academy</strong> - Free videos on statistics and data</li>
+                <li><strong>Google Data Studio</strong> - Pro tool for making dashboards</li>
+                <li><strong>Tableau Public</strong> - Create interactive visualizations</li>
+            </ul>
+        </div>
+    </div>
+        
+        <p>After this class, you'll be able to:</p>
+        <ul>
+            <li>✅ Understand when to use each type of chart</li>
+            <li>✅ Read and interpret charts (see them in news articles and websites)</li>
+            <li>✅ Create your own charts from real data</li>
+            <li>✅ Explain what data means in a visual way</li>
+            <li>✅ Work with a team to create something cool</li>
+            <li>✅ Tell a story with numbers and pictures</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🏆 How to Know You Did a Good Job</h2>
+        
+        <div class="success-checklist">
+            <h3>Your chart is awesome if it has:</h3>
+            <ul>
+                <li>Data that actually shows up and looks right</li>
+                <li>A clear title that says what the chart is about</li>
+                <li>Labels on the axes (if it's not a pie chart) so people know what they're looking at</li>
+                <li>Colors that make sense (not crazy and hard on the eyes)</li>
+                <li>Something interactive—when you hover over parts, something cool happens</li>
+                <li>You can explain what your chart means and why it matters</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>⚠️ Common Mistakes (And How to Fix Them!)</h2>
+
+        <div class="person-box">
+            <h3>Mistake 1: Wrong Colors Make It Hard to Read</h3>
+            <div class="example-box">
+                <strong>❌ DON'T:</strong> Use neon green text on yellow background
+            </div>
+            <div class="example-box" style="background: #d4edda;">
+                <strong>✅ DO:</strong> Use high contrast (dark on light, or light on dark)
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Mistake 2: Forgetting Labels</h3>
+            <div class="example-box">
+                <strong>❌ DON'T:</strong> Show a chart with numbers but no explanation of what the numbers mean
+            </div>
+            <div class="example-box" style="background: #d4edda;">
+                <strong>✅ DO:</strong> Always include:
+                <ul>
+                    <li>A title explaining what the chart shows</li>
+                    <li>Labels on the X and Y axes</li>
+                    <li>A legend if there are multiple colors/lines</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Mistake 3: Too Many Chart Types Mixed Together</h3>
+            <div class="example-box">
+                <strong>❌ DON'T:</strong> Make one chart that tries to be a line chart AND a bar chart AND a pie chart
+            </div>
+            <div class="example-box" style="background: #d4edda;">
+                <strong>✅ DO:</strong> Stick to ONE chart type per visualization. That's what makes it clear!
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Mistake 4: Bad Data Makes Bad Charts</h3>
+            <p>If your numbers are wrong, your chart will be wrong too. This is called "garbage in, garbage out."</p>
+            <div class="example-box" style="background: #d4edda;">
+                <strong>✅ DO:</strong> Check your data before graphing it:
+                <ul>
+                    <li>Are the numbers accurate?</li>
+                    <li>Do they make sense? (Is one number WAY different from the others?)</li>
+                    <li>Did you type anything wrong?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Mistake 5: Comparing Different Scales</h3>
+            <p><strong>Example:</strong> Comparing 5 students' test scores (0-100) with unemployment rates (0-10%). The scales are so different it looks weird.</p>
+            <div class="example-box" style="background: #d4edda;">
+                <strong>✅ DO:</strong> Only compare things that are measured the same way. Or tell people on the chart that the scales are different!
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🚀 Bonus: Advanced Challenges (For Students Who Want More!)</h2>
+
+        <div class="person-box">
+            <h3>Challenge 1: Add Averages & Medians</h3>
+            <p>Make your chart show not just the data, but also the AVERAGE (mean) or MIDDLE value (median).</p>
+            
+            <div class="example-box">
+                <strong>Python code to find average:</strong>
+                <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd;"><code>messages = [10, 15, 12, 18, 22]
+average = sum(messages) / len(messages)
+print(f"Average: {average}")  # Will print: 15.4
+
+# sum adds them: 10+15+12+18+22 = 77
+# len counts them: 5 numbers
+# 77 ÷ 5 = 15.4</code></pre>
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Challenge 2: Make It Interactive</h3>
+            <p>Instead of static images, make charts where people can hover over data points and see the exact number.</p>
+            <div class="example-box">
+                <strong>Tools:</strong> Plotly, Bokeh, or D3.js let you make interactive charts.
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Challenge 3: Combine Multiple Datasets</h3>
+            <p>Track the SAME measurement over different groups or time periods.</p>
+            
+            <div class="example-box">
+                <strong>Example:</strong> Show message types for Person 1 AND Person 2 on the same bar chart using different colors.
+                <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd;"><code>import matplotlib.pyplot as plt
+
+person1 = [10, 15, 5]    # messages by category
+person2 = [8, 20, 8]
+categories = ['Urgent', 'Medium', 'Low']
+
+# Make two bars for each category
+x = [0, 1, 2]
+plt.bar([p - 0.2 for p in x], person1, width=0.4, label='Person 1')
+plt.bar([p + 0.2 for p in x], person2, width=0.4, label='Person 2')
+plt.legend()
+plt.show()</code></pre>
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Challenge 4: Calculate Correlation Coefficient</h3>
+            <p>Put a NUMBER on how strongly two things are related (from -1 to 1).</p>
+            
+            <div class="example-box">
+                <strong>Python code:</strong>
+                <pre style="background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ddd;"><code>import numpy as np
+
+# Does studying hours affect test score?
+study_hours = [1, 2, 3, 4, 5]
+test_scores = [60, 70, 75, 85, 90]
+
+# Calculate correlation (will be close to 1 if related)
+correlation = np.corrcoef(study_hours, test_scores)[0, 1]
+print(f"Correlation: {correlation:.2f}")
+
+# Result: 0.99 = VERY strong relationship!
+# The closer to 1, the more related they are.</code></pre>
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Challenge 5: Make a Real Dashboard</h3>
+            <p>Combine all 5 charts into one webpage that shows the complete story.</p>
+            <div class="example-box">
+                <strong>What this means:</strong> Put all 5 people's charts on the same page. Add explanations for each one. Create something a professional data scientist could use!
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🧠 Understanding Your Data Better</h2>
+
+        <div class="person-box">
+            <h3>Ask These Questions About Your Data:</h3>
+            <ul>
+                <li><strong>What's the highest number?</strong> (Maximum)</li>
+                <li><strong>What's the lowest number?</strong> (Minimum)</li>
+                <li><strong>What's the middle number?</strong> (Median)</li>
+                <li><strong>What's the average?</strong> (Mean)</li>
+                <li><strong>Are there any patterns?</strong></li>
+                <li><strong>Is anything surprising?</strong></li>
+                <li><strong>What story does the data tell?</strong></li>
+            </ul>
+        </div>
+
+        <div class="example-box">
+            <strong>Example Analysis:</strong>
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+Data: Messages per day: [5, 10, 8, 22, 3, 15, 12]
+
+Maximum: 22 (busiest day!)
+Minimum: 3 (slowest day)
+Median: 10 (middle value when sorted)
+Average: (5+10+8+22+3+15+12) ÷ 7 = 10.7
+
+Story: "Messages vary a lot. One day 
+we got 22, another day only 3. On average, 
+about 11 messages per day. Most days are 
+between 8-15 messages."
+            </pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📚 Resources & Helpful Links</h2>
+
+        <div class="person-box">
+            <h3>For This Project:</h3>
+            <ul>
+                <li><strong>Python.org</strong> - Download Python (totally free)</li>
+                <li><strong>Matplotlib Documentation</strong> - How to use the charting tool</li>
+                <li><strong>Replit.com</strong> - Run Python online (no installation needed!)</li>
+                <li><strong>Chart.js</strong> - If you want to use the "easy way"</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <h3>Learn More About Data:</h3>
+            <ul>
+                <li><strong>Khan Academy</strong> - Free videos on statistics and data</li>
+                <li><strong>Google Data Studio</strong> - Pro tool for making dashboards</li>
+                <li><strong>Tableau Public</strong> - Create interactive visualizations</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>💻 How to Run Python Code (It's Easier Than You Think!)</h2>
+        
+        <p>Python code won't run by itself—you need to do 3 things:</p>
+
+        <div class="person-box">
+            <h3>Step 1: Install Python & Matplotlib</h3>
+            <p>Python is a free tool you download once.</p>
+            
+            <ol>
+                <li>Go to <strong>python.org</strong> and download Python 3.9 or newer</li>
+                <li>Run the installer (click Next → Next → Install)</li>
+                <li>Open Terminal (Mac) or Command Prompt (Windows)</li>
+                <li>Type this command:
+                    <pre style="background: #000; color: #00ff00; padding: 10px; border-radius: 5px; margin: 10px 0;">pip install matplotlib</pre>
+                </li>
+                <li>Wait for it to say "Successfully installed"</li>
+            </ol>
+
+            <div class="vocabulary">
+                <strong>🤔 What's pip?</strong> It's a tool that downloads Python libraries (like matplotlib) for you. Think of it as "the app store for Python."
+            </div>
+        </div>
+
+        <div class="person-box">
+            <h3>Step 2: Create Your Python File</h3>
+            <p>Save your code with a special name so Python knows it's code.</p>
+
+            <ol>
+                <li>Open a text editor (or VS Code)</li>
+                <li>Paste one of the code examples (like Person 1's line chart code)</li>
+                <li>Save the file with a name like: <code>my_chart.py</code> (the <code>.py</code> part is important!)</li>
+                <li>Remember where you saved it</li>
+            </ol>
+        </div>
+
+        <div class="person-box">
+            <h3>Step 3: Run Your Code</h3>
+            <p>Tell Python to run what you wrote.</p>
+
+            <ol>
+                <li>Open Terminal (Mac) or Command Prompt (Windows)</li>
+                <li>Navigate to the folder where you saved your file:
+                    <pre style="background: #000; color: #00ff00; padding: 10px; border-radius: 5px; margin: 10px 0;">cd ~/Desktop  (if saved on Desktop)</pre>
+                </li>
+                <li>Type:
+                    <pre style="background: #000; color: #00ff00; padding: 10px; border-radius: 5px; margin: 10px 0;">python my_chart.py</pre>
+                </li>
+                <li>Press Enter and watch your chart appear! 🎉</li>
+            </ol>
+        </div>
+
+        <div class="tip-box">
+            <strong>💡 Troubleshooting:</strong>
+            <ul>
+                <li><strong>"ModuleNotFoundError: No module named 'matplotlib'"</strong> → Run <code>pip install matplotlib</code> again</li>
+                <li><strong>"command not found: python"</strong> → Python isn't installed yet</li>
+                <li><strong>Nothing happens</strong> → Your computer opened the chart in a window behind other windows. Look for it!</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📚 Resources & Helpful Links</h2>
+
+        <div class="person-box">
+            <h3>For This Project:</h3>
+            <ul>
+                <li><strong>Python.org</strong> - Download Python (totally free)</li>
+                <li><strong>Matplotlib Documentation</strong> - How to use the charting tool</li>
+                <li><strong>Replit.com</strong> - Run Python online (no installation needed!)</li>
+                <li><strong>Chart.js</strong> - If you want to use the "easy way"</li>
+            </ul>
+        </div>
+
+        <div class="person-box">
+            <h3>Learn More About Data:</h3>
+            <ul>
+                <li><strong>Khan Academy</strong> - Free videos on statistics and data</li>
+                <li><strong>Google Data Studio</strong> - Pro tool for making dashboards</li>
+                <li><strong>Tableau Public</strong> - Create interactive visualizations</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>❓ FAQ (Questions You Might Have)</h2>
+        
+        <div style="margin: 20px 0;">
+            <p><strong>Q: Do I need to know how to code?</strong><br>
+            A: Nope! We'll use tools that do the coding for you. You just click and drag. But if you want, we show you Python too!</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <p><strong>Q: What if I mess up?</strong><br>
+            A: Great question! You can't actually break anything. Worst case, you delete it and start over. Everyone messes up—that's how we learn.</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <p><strong>Q: What if I'm not good at math?</strong><br>
+            A: This lesson includes basic math explanations! We break it down so it's easy to understand. And honestly, it's more about telling stories with data than complex formulas.</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <p><strong>Q: Can I work with a friend?</strong><br>
+            A: Check with your teacher! Sometimes working together helps, sometimes it's better to work alone. Either way, you'll all be helping each other during the class.</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <p><strong>Q: What happens if I finish early?</strong><br>
+            A: Your teacher will have bonus challenges! Add more data, try a different style, make it interactive, or help someone else with their chart.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>🎓 What You'll Learn</h2>
+        
+        <p>After this class, you'll be able to:</p>
+        <ul>
+            <li>✅ Understand when to use each type of chart</li>
+            <li>✅ Read and interpret charts (see them in news articles and websites)</li>
+            <li>✅ Create your own charts from real data</li>
+            <li>✅ Explain what data means using a visual way</li>
+            <li>✅ Do basic data analysis (find averages, patterns, outliers)</li>
+            <li>✅ Write simple Python code to make charts</li>
+            <li>✅ Work with a team to create something cool</li>
+            <li>✅ Tell a story with numbers and pictures</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>🏆 How to Know You Did a Good Job</h2>
+        
+        <div class="success-checklist">
+            <h3>Your chart is awesome if it has:</h3>
+            <ul>
+                <li>Data that actually shows up and looks right</li>
+                <li>A clear title that says what the chart is about</li>
+                <li>Labels on the axes (if it's not a pie chart) so people know what they're looking at</li>
+                <li>Colors that make sense (high contrast, easy to read)</li>
+                <li>Something interactive—when you hover over parts, something cool happens</li>
+                <li>You can explain what your chart means and why it matters</li>
+                <li><strong>BONUS:</strong> You included interesting insights (like "80% of messages are short!")</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📐 Quick Math Reference Sheet</h2>
+        
+        <div class="person-box">
+            <h3>Common Formulas You'll Use:</h3>
+            
+            <pre style="background: #f0f0f0; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;"><strong>Average (Mean):</strong>
+Add all numbers ÷ How many numbers there are
+Example: (10 + 20 + 30) ÷ 3 = 20
+
+<strong>Median (Middle Value):</strong>
+Sort numbers smallest to largest, pick the middle one
+Example: 3, 5, 7, 9, 11 → Median is 7
+
+<strong>Percentage:</strong>
+(Part ÷ Whole) × 100
+Example: (25 ÷ 100) × 100 = 25%
+
+<strong>Total Range:</strong>
+Maximum - Minimum
+Example: 30 - 5 = 25 (so data ranges from 5 to 30)
+
+<strong>Difference (Comparison):</strong>
+First number - Second number
+Example: 50 - 35 = 15 (first is 15 more than second)
+
+<strong>Increase/Decrease Percentage:</strong>
+(New - Old) ÷ Old × 100
+Example: (150 - 100) ÷ 100 × 100 = 50% increase
+            </pre>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>💡 Pro Tips From Real Data Scientists</h2>
+        
+        <ul>
+            <li><strong>Start Simple:</strong> Get your first chart working, THEN add fancy features</li>
+            <li><strong>Check Your Data:</strong> Spend time understanding your data before you visualize it</li>
+            <li><strong>Tell a Story:</strong> Your chart should answer a question or reveal something surprising</li>
+            <li><strong>Less is More:</strong> Don't cram too much into one chart. Simple beats complicated every time</li>
+            <li><strong>Color Matters:</strong> Use color to highlight important stuff, not just because it looks pretty</li>
+            <li><strong>Label Everything:</strong> Future you will thank present you for clear labels</li>
+            <li><strong>Ask Questions:</strong> When stuck, ask. Every programmer ever gets stuck sometimes</li>
+            <li><strong>Practice:</strong> The only way to get better is to make lots of charts. Don't be scared!</li>
+        </ul>
+    </div>
+
+    <div class="section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-left: none;">
+        <h2 style="color: white; margin-top: 0;">✨ Ready to Become a Data Expert?</h2>
+        <p style="font-size: 1.1em;">You've got this! Remember: everyone starts as a beginner. In 90 minutes, you'll have created something awesome that shows real data in a beautiful way. You're learning skills that professional data scientists use every single day.</p>
+        <p style="text-align: center; font-size: 1.3em; margin: 20px 0;"><strong>Let's visualize some data! 📊📈🍰</strong></p>
+        <p style="text-align: center; font-size: 1em;"><em>Questions? Ask your teacher. Bugs? Google it. Stuck? That's normal. Keep going!</em></p>
+    </div>
+
+</body>
+</html>
